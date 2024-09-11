@@ -9,7 +9,11 @@ import spriteRunRight from '../images/spriteRunRight.png';
 import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
 
-export function initializeGame(canvas) {
+export function initializeGame(canvas, playerPosition) {
+  console.log("🎉🎉");
+  console.log(playerPosition);
+  console.log(playerPosition.curr_x);
+  console.log(playerPosition.curr_y);
   const c = canvas.getContext('2d');
   canvas.width = window.innerWidth * .99;
   canvas.height = window.innerHeight * 0.97;
@@ -46,8 +50,8 @@ export function initializeGame(canvas) {
 
     reset() {
       this.position = {
-        x: 100,
-        y: 470 - 150,
+        x: playerPosition.curr_x,
+        y: playerPosition.curr_y,
       };
       this.velocity = {
         x: 0,
@@ -227,13 +231,9 @@ export function initializeGame(canvas) {
     });
   
     if (player.position.y >= 400) {
-      console.log("{♨️}",canvas.height)
-      console.log("🖥️🖥️ ", "reseting")
       init();
     }
   
-    console.log("✨✨ ", scrollOffset + player.position.x, player.position.y);
-    console.log("♨️", canvas.height)
   }
 
   init();
