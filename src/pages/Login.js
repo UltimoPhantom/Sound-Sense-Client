@@ -35,14 +35,12 @@ function Login({ setIsAuthenticated }) {
       const { success, message, jwtToken, name, error } = result;
       if (success) {
         handleSuccess(message);
-        localStorage.setItem('token', jwtToken); // Store JWT token in localStorage
-        localStorage.setItem('loggedInUser', name); // Store user name in localStorage
-        setIsAuthenticated(true); // Set authentication status
-        setTimeout(() => {
-          navigate('/home');
-        }, 1000);
+        localStorage.setItem('token', jwtToken);
+        localStorage.setItem('loggedInUser', name);
+        setIsAuthenticated(true);
+        navigate('/home');  // Redirect to /home after successful login
       } else if (error) {
-        handleError(error.details[0]?.message || message); // Handle error message
+        handleError(error.details[0]?.message || message);
       } else {
         handleError(message || 'Login failed');
       }
@@ -50,7 +48,7 @@ function Login({ setIsAuthenticated }) {
       handleError(err.message || 'An unexpected error occurred');
     }
   };
-
+  
   return (
     <div className='container'>
       <h1>Welcome Back!</h1>
