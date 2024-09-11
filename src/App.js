@@ -56,6 +56,7 @@ function App() {
       const result = await response.json();
       if (result.success) {
         setPlayerPosition({ curr_x: result.curr_x, curr_y: result.curr_y });
+        
       } else {
         console.error(result.message);
       }

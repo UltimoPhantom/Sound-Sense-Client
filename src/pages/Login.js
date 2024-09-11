@@ -38,7 +38,7 @@ function Login({ setIsAuthenticated }) {
         localStorage.setItem('token', jwtToken);
         localStorage.setItem('loggedInUser', name);
         setIsAuthenticated(true);
-        navigate('/home');  // Redirect to /home after successful login
+        navigate('/home');  
       } else if (error) {
         handleError(error.details[0]?.message || message);
       } else {
@@ -48,7 +48,7 @@ function Login({ setIsAuthenticated }) {
       handleError(err.message || 'An unexpected error occurred');
     }
   };
-  
+
   return (
     <div className='container'>
       <h1>Welcome Back!</h1>

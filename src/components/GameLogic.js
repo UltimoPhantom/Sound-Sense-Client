@@ -1,4 +1,3 @@
-// src/components/GameLogic.js
 import React, { useEffect, useRef } from 'react';
 import platform from '../images/platform.png';
 import hills from '../images/hills.png';
@@ -10,7 +9,7 @@ import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
 
 export function initializeGame(canvas, playerPosition) {
-  console.log("🎉🎉");
+  console.log("🎉*&*&🎉");
   console.log(playerPosition);
   console.log(playerPosition.curr_x);
   console.log(playerPosition.curr_y);
@@ -189,7 +188,7 @@ export function initializeGame(canvas, playerPosition) {
     genericObjects.forEach((genericObject) => genericObject.draw());
     platforms.forEach((platform) => platform.draw());
     player.update();
-  
+    console.log("🎉 ", player.position.x, player.position.y)
     if (keys.right.pressed && player.position.x < 400) {
       player.velocity.x = player.speed;
     } else if (
