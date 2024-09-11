@@ -35,19 +35,19 @@ function Login({ setIsAuthenticated }) {
       const { success, message, jwtToken, name, error } = result;
       if (success) {
         handleSuccess(message);
-        localStorage.setItem('token', jwtToken); // Store JWT token
-        localStorage.setItem('loggedInUser', name);
+        localStorage.setItem('token', jwtToken); // Store JWT token in localStorage
+        localStorage.setItem('loggedInUser', name); // Store user name in localStorage
         setIsAuthenticated(true); // Set authentication status
         setTimeout(() => {
           navigate('/home');
         }, 1000);
       } else if (error) {
-        handleError(error.details[0]?.message);
-      } else if (!success) {
-        handleError(message);
+        handleError(error.details[0]?.message || message); // Handle error message
+      } else {
+        handleError(message || 'Login failed');
       }
     } catch (err) {
-      handleError(err.message);
+      handleError(err.message || 'An unexpected error occurred');
     }
   };
 
@@ -64,6 +64,7 @@ function Login({ setIsAuthenticated }) {
             name='email'
             placeholder='Enter your email...'
             value={loginInfo.email}
+            required
           />
         </div>
         <div>
@@ -74,12 +75,12 @@ function Login({ setIsAuthenticated }) {
             name='password'
             placeholder='Enter your password...'
             value={loginInfo.password}
+            required
           />
         </div>
         <button type='submit'>Login</button>
         <span>Don't have an account? <Link to="/signup">Signup</Link></span>
       </form>
-      <ToastContainer />
     </div>
   );
 }

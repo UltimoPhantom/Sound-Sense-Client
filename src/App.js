@@ -10,12 +10,14 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [playerPosition, setPlayerPosition] = useState({ curr_x: 0, curr_y: 0 });
 
-  // Private Route component to protect authenticated pages
-  const PrivateRoute = ({ element }) => {
-    return isAuthenticated ? element : <Navigate to="/login" />;
-  };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+      fetchPlayerPosition(); // Fetch player position if authenticated
+    }
+  }, []);
 
-  // Fetch player position (curr_x, curr_y) when authenticated
   const fetchPlayerPosition = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -40,22 +42,19 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchPlayerPosition(); // Fetch player position after authentication
-    }
-  }, [isAuthenticated]);
+  const PrivateRoute = ({ element }) => {
+    return isAuthenticated ? element : <Navigate to="/login" />;
+  };
 
   return (
     <BrowserRouter>
       <div className="App">
-        <ToastContainer />
         <Routes>
           <Route path='/' element={<Navigate to="/login" />} />
           <Route path='/login' element={<Login setIsAuthenticated={setIsAuthenticated} />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/home' element={<PrivateRoute element={<Home playerPosition={playerPosition} />} />} />
-          <Route path='/game' element={<PrivateRoute element={<GameCanvas />} />} />
+          <Route path='/child' element={<PrivateRoute element={<GameCanvas playerPosition={playerPosition} />} />} />
         </Routes>
       </div>
     </BrowserRouter>
