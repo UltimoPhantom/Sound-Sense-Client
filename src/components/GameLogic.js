@@ -176,7 +176,6 @@ export function initializeGame(canvas, playerPosition) {
 
     cameraX = player.position.x - canvas.width / 2;
 
-    player.logPosition();
 
     if (keys.right.pressed) {
       player.velocity.x = player.speed;
@@ -198,7 +197,7 @@ export function initializeGame(canvas, playerPosition) {
     });
 
     if (player.position.y >= 427) {
-      alert("YOU DED")
+      // alert("YOU DED")
       init();
     }
   }
@@ -207,6 +206,8 @@ export function initializeGame(canvas, playerPosition) {
   animate();
 
   window.addEventListener('keydown', ({ key }) => {
+    player.logPosition();
+
     switch (key) {
       case 'a':
         keys.left.pressed = true;
@@ -227,6 +228,8 @@ export function initializeGame(canvas, playerPosition) {
   });
 
   window.addEventListener('keyup', ({ key }) => {
+    player.logPosition();
+
     switch (key) {
       case 'a':
         keys.left.pressed = false;
