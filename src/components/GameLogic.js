@@ -10,9 +10,9 @@ import spriteStandRight from '../images/spriteStandRight.png';
 
 export function initializeGame(canvas, playerPosition) {
   const c = canvas.getContext('2d');
-  canvas.width = 1024;
-  canvas.height = 576;
-
+  canvas.width = window.innerWidth * .99;
+  canvas.height = window.innerHeight * 0.97;
+  
   const gravity = 1.0;
   const jumpStrength = -20;
 

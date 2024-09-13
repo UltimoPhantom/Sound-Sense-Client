@@ -91,7 +91,7 @@ function App() {
             element={isAuthenticated ? <GameCanvas playerPosition={playerPosition} /> : <Navigate to="/login" />} 
           />
         </Routes>
-        {isAuthenticated && <button onClick={handleLogout}>Logout</button>}
+        {/* {isAuthenticated && <button onClick={handleLogout}>Logout</button>} */}
         <ToastContainer />
       </div>
     </BrowserRouter>
