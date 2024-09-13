@@ -180,15 +180,19 @@ export function initializeGame(canvas, playerPosition) {
     });
     animate();
   }
+
   function animate() {
     requestAnimationFrame(animate);
     c.fillStyle = 'white';
     c.fillRect(0, 0, canvas.width, canvas.height);
   
     genericObjects.forEach((genericObject) => genericObject.draw());
+
     platforms.forEach((platform) => platform.draw());
+    
     player.update();
     console.log("🎉 ", player.position.x, player.position.y)
+
     if (keys.right.pressed && player.position.x < 400) {
       player.velocity.x = player.speed;
     } else if (
