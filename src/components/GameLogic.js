@@ -15,7 +15,6 @@ export function initializeGame(canvas, playerPosition) {
 
   const gravity = 1.0;
   const jumpStrength = -20;
-  const cameraSpeed = 0.05;
 
   function createImage(src) {
     const image = new Image();
@@ -102,7 +101,7 @@ export function initializeGame(canvas, playerPosition) {
     }
 
     logPosition() {
-      console.log(`Player World Position: (${this.position.x.toFixed(2)}, ${this.position.y.toFixed(2)})`);
+      console.log(`(${this.position.x.toFixed(2)}, ${this.position.y.toFixed(2)})`);
     }
   }
 
@@ -175,10 +174,8 @@ export function initializeGame(canvas, playerPosition) {
     platforms.forEach((platform) => platform.draw());
     player.update();
 
-    // Update camera position
     cameraX = player.position.x - canvas.width / 2;
 
-    // Log player position
     player.logPosition();
 
     if (keys.right.pressed) {
@@ -189,7 +186,6 @@ export function initializeGame(canvas, playerPosition) {
       player.velocity.x = 0;
     }
 
-    // Platform collision detection
     platforms.forEach((platform) => {
       if (
         player.position.y + player.height <= platform.position.y &&
@@ -201,7 +197,6 @@ export function initializeGame(canvas, playerPosition) {
       }
     });
 
-    // Lose condition
     if (player.position.y >= 427) {
       alert("YOU DED")
       init();
