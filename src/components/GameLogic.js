@@ -9,25 +9,26 @@ import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
 
 export function initializeGame(canvas, playerPosition) {
-  console.log("🎉*&*&🎉");
-  console.log(playerPosition);
-  console.log(playerPosition.curr_x);
-  console.log(playerPosition.curr_y);
   const c = canvas.getContext('2d');
-  canvas.width = window.innerWidth * .99;
-  canvas.height = window.innerHeight * 0.97;
+  canvas.width = 1024;
+  canvas.height = 576;
 
   const gravity = 1.0;
   const jumpStrength = -20;
+  const cameraSpeed = 0.05;
+
+  function createImage(src) {
+    const image = new Image();
+    image.src = src;
+    return image;
+  }
 
   class Player {
     constructor() {
-      this.reset();
       this.width = 66;
       this.height = 150;
       this.speed = 10;
       this.frames = 0;
-
       this.sprites = {
         stand: {
           right: createImage(spriteStandRight),
@@ -45,12 +46,13 @@ export function initializeGame(canvas, playerPosition) {
 
       this.currentSprite = this.sprites.stand.right;
       this.currentCropWidth = this.sprites.stand.cropWidth;
+      this.reset(playerPosition);
     }
 
-    reset() {
+    reset(position) {
       this.position = {
-        x: playerPosition.curr_x,
-        y: playerPosition.curr_y,
+        x: position.curr_x || 100,
+        y: position.curr_y || 100,
       };
       this.velocity = {
         x: 0,
@@ -65,7 +67,7 @@ export function initializeGame(canvas, playerPosition) {
         0,
         this.currentCropWidth,
         400,
-        this.position.x,
+        this.position.x - cameraX,
         this.position.y,
         this.width,
         this.height
@@ -87,61 +89,54 @@ export function initializeGame(canvas, playerPosition) {
       )
         this.frames = 0;
 
-      this.draw();
-      this.position.y += this.velocity.y;
       this.position.x += this.velocity.x;
+      this.position.y += this.velocity.y;
 
       if (this.position.y + this.height + this.velocity.y <= canvas.height) {
         this.velocity.y += gravity;
       } else {
         this.velocity.y = 0;
       }
+
+      this.draw();
+    }
+
+    logPosition() {
+      console.log(`Player World Position: (${this.position.x.toFixed(2)}, ${this.position.y.toFixed(2)})`);
     }
   }
 
   class Platform {
     constructor({ x, y, image }) {
-      this.position = {
-        x,
-        y,
-      };
+      this.position = { x, y };
       this.image = image;
       this.width = image.width;
       this.height = image.height;
     }
 
     draw() {
-      c.drawImage(this.image, this.position.x, this.position.y);
+      c.drawImage(this.image, this.position.x - cameraX, this.position.y);
     }
   }
 
   class GenericObject {
     constructor({ x, y, image }) {
-      this.position = {
-        x,
-        y,
-      };
+      this.position = { x, y };
       this.image = image;
       this.width = image.width;
       this.height = image.height;
     }
 
     draw() {
-      c.drawImage(this.image, this.position.x, this.position.y);
+      c.drawImage(this.image, this.position.x - cameraX, this.position.y);
     }
-  }
-
-  function createImage(src) {
-    const image = new Image();
-    image.src = src;
-    return image;
   }
 
   let player;
   let platforms;
   let genericObjects;
   let keys;
-  let scrollOffset;
+  let cameraX = 0;
 
   function init() {
     player = new Player();
@@ -151,7 +146,7 @@ export function initializeGame(canvas, playerPosition) {
     const platformSmallTallImage = createImage(platformSmallTall);
 
     platforms = [
-      new Platform({ x: (platformImage.width) + 300 - 2 + platformImage.width - platformSmallTallImage.width, y: 270, image: platformSmallTallImage }),
+      new Platform({ x: platformImage.width + 300 - 2 + platformImage.width - platformSmallTallImage.width, y: 270, image: platformSmallTallImage }),
       new Platform({ x: -1, y: 470, image: platformImage }),
       new Platform({ x: platformImage.width + 50, y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
@@ -161,67 +156,40 @@ export function initializeGame(canvas, playerPosition) {
     ];
 
     genericObjects = [
-      new GenericObject({ x: 0, y: 0, image: backgroundImage }),
-      new GenericObject({ x: 0, y: 0, image: hillsImage }),
+      new GenericObject({ x: -1, y: -1, image: backgroundImage }),
+      new GenericObject({ x: -1, y: -1, image: hillsImage }),
     ];
 
     keys = {
       right: { pressed: false },
       left: { pressed: false },
     };
-    scrollOffset = 0;
-  }
-
-  function resetGame() {
-    player.reset();
-    scrollOffset = 0;
-    platforms.forEach(platform => {
-      platform.position.x += scrollOffset;
-    });
-    animate();
   }
 
   function animate() {
     requestAnimationFrame(animate);
     c.fillStyle = 'white';
     c.fillRect(0, 0, canvas.width, canvas.height);
-  
+
     genericObjects.forEach((genericObject) => genericObject.draw());
-
     platforms.forEach((platform) => platform.draw());
-    
     player.update();
-    console.log("🎉 ", player.position.x, player.position.y)
 
-    if (keys.right.pressed && player.position.x < 400) {
+    // Update camera position
+    cameraX = player.position.x - canvas.width / 2;
+
+    // Log player position
+    player.logPosition();
+
+    if (keys.right.pressed) {
       player.velocity.x = player.speed;
-    } else if (
-      (keys.left.pressed && player.position.x > 100) ||
-      (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
-    ) {
+    } else if (keys.left.pressed) {
       player.velocity.x = -player.speed;
     } else {
       player.velocity.x = 0;
-  
-      if (keys.right.pressed) {
-        scrollOffset += player.speed;
-        platforms.forEach((platform) => {
-          platform.position.x -= player.speed;
-        });
-        genericObjects.forEach((genericObject) => {
-          genericObject.position.x -= player.speed * 0.66;
-        });
-      } else if (keys.left.pressed && scrollOffset > 0) {
-        scrollOffset -= player.speed;
-        platforms.forEach((platform) => {
-          platform.position.x += player.speed;
-        });
-        genericObjects.forEach((genericObject) => {
-          genericObject.position.x += player.speed * 0.66;
-        });
-      }
     }
-  
+
+    // Platform collision detection
     platforms.forEach((platform) => {
       if (
         player.position.y + player.height <= platform.position.y &&
@@ -232,11 +200,12 @@ export function initializeGame(canvas, playerPosition) {
         player.velocity.y = 0;
       }
     });
-  
-    if (player.position.y >= 400) {
+
+    // Lose condition
+    if (player.position.y >= 427) {
+      alert("YOU DED")
       init();
     }
-  
   }
 
   init();
