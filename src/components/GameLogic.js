@@ -7,12 +7,14 @@ import spriteRunLeft from '../images/spriteRunLeft.png';
 import spriteRunRight from '../images/spriteRunRight.png';
 import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
+import box_open_png from '../images/box_open_png.png';
+import box_close_png from '../images/box_close_png.png';
 
 export function initializeGame(canvas, playerPosition) {
   const c = canvas.getContext('2d');
   canvas.width = window.innerWidth * .99;
   canvas.height = window.innerHeight * 0.97;
-  
+
   const gravity = 1.0;
   const jumpStrength = -20;
 
@@ -131,9 +133,33 @@ export function initializeGame(canvas, playerPosition) {
     }
   }
 
+  class Treasure {
+    constructor({ x, y, imageClosed, imageOpen }) {
+      this.position = { x, y };
+      this.imageClosed = imageClosed;
+      this.imageOpen = imageOpen;
+      this.width = imageClosed.width;
+      this.height = imageClosed.height;
+      this.isOpen = false;
+    }
+
+    draw() {
+      if (this.isOpen) {
+        c.drawImage(this.imageOpen, this.position.x - cameraX, this.position.y);
+      } else {
+        c.drawImage(this.imageClosed, this.position.x - cameraX, this.position.y);
+      }
+    }
+
+    open() {
+      this.isOpen = true;  // Mark the treasure as opened
+    }
+  }
+
   let player;
   let platforms;
   let genericObjects;
+  let treasures;
   let keys;
   let cameraX = 0;
 
@@ -159,6 +185,24 @@ export function initializeGame(canvas, playerPosition) {
       new GenericObject({ x: -1, y: -1, image: hillsImage }),
     ];
 
+    const treasureClosedImage = createImage(box_close_png);
+    const treasureOpenImage = createImage(box_open_png);
+
+    treasures = [
+      new Treasure({
+        x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2, // Centered on the second platform
+        y: platforms[1].position.y - treasureClosedImage.height, // Positioned above the platform
+        imageClosed: treasureClosedImage,
+        imageOpen: treasureOpenImage
+      }),
+      new Treasure({
+        x: platforms[3].position.x + platforms[3].width / 2 - treasureClosedImage.width / 2, // Centered on the fourth platform
+        y: platforms[3].position.y - treasureClosedImage.height,
+        imageClosed: treasureClosedImage,
+        imageOpen: treasureOpenImage
+      })
+    ];
+
     keys = {
       right: { pressed: false },
       left: { pressed: false },
@@ -172,10 +216,10 @@ export function initializeGame(canvas, playerPosition) {
 
     genericObjects.forEach((genericObject) => genericObject.draw());
     platforms.forEach((platform) => platform.draw());
+    treasures.forEach((treasure) => treasure.draw());
     player.update();
 
     cameraX = player.position.x - canvas.width / 2;
-
 
     if (keys.right.pressed) {
       player.velocity.x = player.speed;
@@ -193,6 +237,17 @@ export function initializeGame(canvas, playerPosition) {
         player.position.x <= platform.position.x + platform.width
       ) {
         player.velocity.y = 0;
+      }
+    });
+
+    treasures.forEach((treasure) => {
+      if (
+        player.position.y + player.height <= treasure.position.y &&
+        player.position.y + player.height + player.velocity.y >= treasure.position.y &&
+        player.position.x + player.width >= treasure.position.x &&
+        player.position.x <= treasure.position.x + treasure.width
+      ) {
+        treasure.open();
       }
     });
 
