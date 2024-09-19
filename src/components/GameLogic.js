@@ -134,27 +134,41 @@ export function initializeGame(canvas, playerPosition) {
   }
 
   class Treasure {
-    constructor({ x, y, imageClosed, imageOpen }) {
+    constructor({ x, y, imageClosed, imageOpen, scale = 0.25 }) {
       this.position = { x, y };
       this.imageClosed = imageClosed;
       this.imageOpen = imageOpen;
-      this.width = imageClosed.width;
-      this.height = imageClosed.height;
+      this.width = imageClosed.width * scale;  // Scale the width
+      this.height = imageClosed.height * scale; // Scale the height
       this.isOpen = false;
+      this.scale = scale;  // Store the scale factor
     }
-
+  
     draw() {
       if (this.isOpen) {
-        c.drawImage(this.imageOpen, this.position.x - cameraX, this.position.y);
+        c.drawImage(
+          this.imageOpen,
+          this.position.x - cameraX,
+          this.position.y,
+          this.width,    // Use the scaled width
+          this.height    // Use the scaled height
+        );
       } else {
-        c.drawImage(this.imageClosed, this.position.x - cameraX, this.position.y);
+        c.drawImage(
+          this.imageClosed,
+          this.position.x - cameraX,
+          this.position.y,
+          this.width,    // Use the scaled width
+          this.height    // Use the scaled height
+        );
       }
     }
-
+  
     open() {
       this.isOpen = true;  // Mark the treasure as opened
     }
   }
+  
 
   let player;
   let platforms;
@@ -191,13 +205,13 @@ export function initializeGame(canvas, playerPosition) {
     treasures = [
       new Treasure({
         x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2, // Centered on the second platform
-        y: platforms[1].position.y - treasureClosedImage.height, // Positioned above the platform
+        y: platforms[1].position.y - treasureClosedImage.height + 585, // Positioned above the platform
         imageClosed: treasureClosedImage,
         imageOpen: treasureOpenImage
       }),
       new Treasure({
         x: platforms[3].position.x + platforms[3].width / 2 - treasureClosedImage.width / 2, // Centered on the fourth platform
-        y: platforms[3].position.y - treasureClosedImage.height,
+        y: platforms[3].position.y - treasureClosedImage.height + 385,
         imageClosed: treasureClosedImage,
         imageOpen: treasureOpenImage
       })
