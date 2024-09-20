@@ -10,26 +10,15 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [playerPosition, setPlayerPosition] = useState({ curr_x: 0, curr_y: 0 });
+  const [treasureArray, setTreasureArray] = useState([])
 
   const validateTokenAndSetAuth = async () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        // Uncomment and use your actual validation endpoint
-        // const response = await fetch('http://localhost:8080/auth/validate', {
-        //   method: 'GET',
-        //   headers: {
-        //     'Authorization': `Bearer ${token}`,
-        //     'Content-Type': 'application/json',
-        //   },
-        // });
-        // const result = await response.json();
-        // if (result.success) {
         setIsAuthenticated(true);
         await fetchPlayerPosition(token);
-        // } else {
-        //   handleLogout();
-        // }
+        await fetchPlayerTreasureArray(token);
       } catch (error) {
         console.error('Error validating token:', error);
         handleLogout();
@@ -44,6 +33,28 @@ function App() {
     validateTokenAndSetAuth();
   }, []);
 
+  const fetchPlayerTreasureArray = async (token) => {
+    try {
+      const response = await fetch("http://localhost:8080/player/getTreasureArray", {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      const result = await response.json();
+      if (result.success) {
+        setTreasureArray(result.treasureArray)
+      }
+      else {
+        console.log(result.message)
+      }
+    }
+    catch (err) {
+      console.log(err.message)
+    }
+  }
+
   const fetchPlayerPosition = async (token) => {
     try {
       const response = await fetch('http://localhost:8080/player/getXY', {
@@ -56,7 +67,7 @@ function App() {
       const result = await response.json();
       if (result.success) {
         setPlayerPosition({ curr_x: result.curr_x, curr_y: result.curr_y });
-        
+
       } else {
         console.error(result.message);
       }
@@ -80,16 +91,21 @@ function App() {
       <div className="App">
         <Routes>
           <Route path='/' element={isAuthenticated ? <Navigate to="/child" /> : <Navigate to="/login" />} />
+
           <Route path='/login' element={isAuthenticated ? <Navigate to="/child" /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
+
           <Route path='/signup' element={<Signup />} />
-          <Route 
-            path='/home' 
-            element={isAuthenticated ? <Home playerPosition={playerPosition} /> : <Navigate to="/login" />} 
+
+          <Route
+            path='/home'
+            element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
           />
-          <Route 
-            path='/child' 
-            element={isAuthenticated ? <GameCanvas playerPosition={playerPosition} /> : <Navigate to="/login" />} 
+
+          <Route
+            path='/child'
+            element={isAuthenticated ? <GameCanvas playerPosition={playerPosition} treasureArray={treasureArray} /> : <Navigate to="/login" />}
           />
+
         </Routes>
         {/* {isAuthenticated && <button onClick={handleLogout}>Logout</button>} */}
         <ToastContainer />
