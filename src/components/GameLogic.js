@@ -15,6 +15,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
   canvas.width = window.innerWidth * .99;
   canvas.height = window.innerHeight * 0.97;
   var treasureIndex = 0
+  var validTreasureIndex = []
 
   const gravity = 1.0;
   const jumpStrength = -20;
@@ -143,7 +144,18 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       this.imageOpen = imageOpen;
       this.width = imageClosed.width * scale;  
       this.height = imageClosed.height * scale; 
-      this.scale = scale;  
+      this.scale = scale;
+      
+      if(treasureArray.includes(this.tIDX)) {
+        this.isOpen = true;
+      }
+      else {
+        this.isOpen = false;
+        validTreasureIndex.push({
+          tIDX: tIDX,
+          position: this.position 
+        })
+      }  
     }
   
     draw() {
