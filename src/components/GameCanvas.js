@@ -2,14 +2,14 @@
 import React, { useEffect, useRef } from 'react';
 import { initializeGame } from './GameLogic';
 
-const GameCanvas = ({ playerPosition }) => {
+const GameCanvas = ({ playerPosition, treasureArray }) => {
   const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    initializeGame(canvas, playerPosition);
+    initializeGame(canvas, playerPosition, treasureArray);
   }, []);
 
   return <canvas ref={canvasRef}></canvas>;

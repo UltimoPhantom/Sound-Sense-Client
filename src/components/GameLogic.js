@@ -10,10 +10,11 @@ import spriteStandRight from '../images/spriteStandRight.png';
 import box_open_png from '../images/box_open_png.png';
 import box_close_png from '../images/box_close_png.png';
 
-export function initializeGame(canvas, playerPosition) {
+export function initializeGame(canvas, playerPosition, treasureArray) {
   const c = canvas.getContext('2d');
   canvas.width = window.innerWidth * .99;
   canvas.height = window.innerHeight * 0.97;
+  var treasureIndex = 0
 
   const gravity = 1.0;
   const jumpStrength = -20;
@@ -134,14 +135,15 @@ export function initializeGame(canvas, playerPosition) {
   }
 
   class Treasure {
-    constructor({ x, y, imageClosed, imageOpen, scale = 0.25 }) {
+    constructor({ tIDX, x, y, imageClosed, imageOpen, scale = 0.25, isOpen }) {
+      this.tIDX = tIDX    // tIDX: index of current treasure box
+      treasureIndex + 1
       this.position = { x, y };
       this.imageClosed = imageClosed;
       this.imageOpen = imageOpen;
-      this.width = imageClosed.width * scale;  // Scale the width
-      this.height = imageClosed.height * scale; // Scale the height
-      this.isOpen = false;
-      this.scale = scale;  // Store the scale factor
+      this.width = imageClosed.width * scale;  
+      this.height = imageClosed.height * scale; 
+      this.scale = scale;  
     }
   
     draw() {
@@ -150,22 +152,23 @@ export function initializeGame(canvas, playerPosition) {
           this.imageOpen,
           this.position.x - cameraX,
           this.position.y,
-          this.width,    // Use the scaled width
-          this.height    // Use the scaled height
+          this.width,   
+          this.height    
         );
       } else {
         c.drawImage(
           this.imageClosed,
           this.position.x - cameraX,
           this.position.y,
-          this.width,    // Use the scaled width
-          this.height    // Use the scaled height
+          this.width,    
+          this.height    
         );
       }
     }
   
     open() {
-      this.isOpen = true;  // Mark the treasure as opened
+      this.isOpen = true;
+
     }
   }
   
@@ -204,16 +207,18 @@ export function initializeGame(canvas, playerPosition) {
 
     treasures = [
       new Treasure({
+        tIDX: treasureIndex++,
         x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2, // Centered on the second platform
         y: platforms[1].position.y - treasureClosedImage.height + 585, // Positioned above the platform
         imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage
+        imageOpen: treasureOpenImage,
       }),
       new Treasure({
+        tIDX: treasureArray++,
         x: platforms[3].position.x + platforms[3].width / 2 - treasureClosedImage.width / 2, // Centered on the fourth platform
         y: platforms[3].position.y - treasureClosedImage.height + 385,
         imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage
+        imageOpen: treasureOpenImage,
       })
     ];
 
@@ -266,7 +271,6 @@ export function initializeGame(canvas, playerPosition) {
     });
 
     if (player.position.y >= 427) {
-      // alert("YOU DED")
       init();
     }
   }
