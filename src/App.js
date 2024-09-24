@@ -45,9 +45,10 @@ function App() {
       });
       const result = await response.json();
       if (result.success) {
-        setTreasureArray(result.treasureArray);
-      } else {
-        console.log(result.message);
+        setTreasureArray(result.arr)
+      }
+      else {
+        console.log(result.message)
       }
     } catch (err) {
       console.log(err.message);
