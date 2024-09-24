@@ -138,7 +138,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
   class Treasure {
     constructor({ tIDX, x, y, imageClosed, imageOpen, scale = 0.25, isOpen }) {
       this.tIDX = tIDX    // tIDX: index of current treasure box
-      treasureIndex + 1
+      treasureIndex++;
       this.position = { x, y };
       this.imageClosed = imageClosed;
       this.imageOpen = imageOpen;

@@ -1,3 +1,4 @@
+import '../index.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleError, handleSuccess } from '../utils';
@@ -33,7 +34,11 @@ function Home() {
         <button className="navbar-button" onClick={handleLogout}>Logout</button>
       </nav>
       {/* <ToastContainer /> */}
+
+      <h1>Working</h1>
     </div>
+
+  
   );
 }
 
