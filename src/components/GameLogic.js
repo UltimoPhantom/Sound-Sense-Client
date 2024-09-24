@@ -142,10 +142,10 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       this.position = { x, y };
       this.imageClosed = imageClosed;
       this.imageOpen = imageOpen;
-      this.width = imageClosed.width * scale;  
-      this.height = imageClosed.height * scale; 
+      this.width = imageClosed.width * scale;
+      this.height = imageClosed.height * scale;
       this.scale = scale;
-      
+  
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
         this.isOpen = true;
       } else {
