@@ -11,15 +11,19 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [playerPosition, setPlayerPosition] = useState({ curr_x: 0, curr_y: 0 });
+<<<<<<< HEAD
   const [treasureArray, setTreasureArray] = useState([]);
+=======
+  const [treasureArray, setTreasureArray] = useState([-1])
+>>>>>>> 47dd1d414ba116a175e5702181f028e6bd1ceed6
 
   const validateTokenAndSetAuth = async () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
         setIsAuthenticated(true);
-        await fetchPlayerPosition(token);
         await fetchPlayerTreasureArray(token);
+        await fetchPlayerPosition(token);
       } catch (error) {
         console.error('Error validating token:', error);
         handleLogout();
@@ -45,9 +49,16 @@ function App() {
       });
       const result = await response.json();
       if (result.success) {
+<<<<<<< HEAD
         setTreasureArray(result.treasureArray);
       } else {
         console.log(result.message);
+=======
+        setTreasureArray(result.arr)
+      }
+      else {
+        console.log(result.message)
+>>>>>>> 47dd1d414ba116a175e5702181f028e6bd1ceed6
       }
     } catch (err) {
       console.log(err.message);
@@ -97,7 +108,7 @@ function App() {
 
           <Route
             path='/home'
-            element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+            element={isAuthenticated ? <Home playerPosition={playerPosition} treasureArray={treasureArray} /> : <Navigate to="/login" />}
           />
 
           <Route
