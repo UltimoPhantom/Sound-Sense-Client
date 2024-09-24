@@ -1,12 +1,13 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
     margin: 0;
-    background-color: black;
+    background-color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 120vh;
-  }
-  
-  canvas {
-    /* Add any specific canvas styles if needed */
   }
