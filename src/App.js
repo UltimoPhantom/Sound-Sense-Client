@@ -4,13 +4,14 @@ import GameCanvas from './components/GameCanvas';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
+import LandingPage from './pages/landing'
 import { ToastContainer } from 'react-toastify';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [playerPosition, setPlayerPosition] = useState({ curr_x: 0, curr_y: 0 });
-  const [treasureArray, setTreasureArray] = useState([])
+  const [treasureArray, setTreasureArray] = useState([]);
 
   const validateTokenAndSetAuth = async () => {
     const token = localStorage.getItem('token');
@@ -44,16 +45,14 @@ function App() {
       });
       const result = await response.json();
       if (result.success) {
-        setTreasureArray(result.treasureArray)
+        setTreasureArray(result.treasureArray);
+      } else {
+        console.log(result.message);
       }
-      else {
-        console.log(result.message)
-      }
+    } catch (err) {
+      console.log(err.message);
     }
-    catch (err) {
-      console.log(err.message)
-    }
-  }
+  };
 
   const fetchPlayerPosition = async (token) => {
     try {
@@ -67,7 +66,6 @@ function App() {
       const result = await response.json();
       if (result.success) {
         setPlayerPosition({ curr_x: result.curr_x, curr_y: result.curr_y });
-
       } else {
         console.error(result.message);
       }
@@ -90,7 +88,8 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path='/' element={isAuthenticated ? <Navigate to="/child" /> : <Navigate to="/login" />} />
+          {/* Update default route to LandingPage */}
+          <Route path='/' element={<LandingPage />} />
 
           <Route path='/login' element={isAuthenticated ? <Navigate to="/child" /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
 
@@ -105,9 +104,7 @@ function App() {
             path='/child'
             element={isAuthenticated ? <GameCanvas playerPosition={playerPosition} treasureArray={treasureArray} /> : <Navigate to="/login" />}
           />
-
         </Routes>
-        {/* {isAuthenticated && <button onClick={handleLogout}>Logout</button>} */}
         <ToastContainer />
       </div>
     </BrowserRouter>
