@@ -11,8 +11,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [playerPosition, setPlayerPosition] = useState({ curr_x: 0, curr_y: 0 });
-
-  const [treasureArray, setTreasureArray] = useState([-1])
+  const [treasureArray, setTreasureArray] = useState([])
 
   const validateTokenAndSetAuth = async () => {
     const token = localStorage.getItem('token');
@@ -44,14 +43,8 @@ function App() {
           'Content-Type': 'application/json',
         }
       });
-      const result = await response.json();
-      if (result.success) {
-
-        setTreasureArray(result.arr)
-      }
-      else {
-        console.log(result.message)
-      }
+      const { arr, success } = await response.json();
+      setTreasureArray(arr)
     } catch (err) {
       console.log(err.message);
     }
