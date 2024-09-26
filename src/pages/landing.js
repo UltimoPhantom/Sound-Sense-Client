@@ -6,10 +6,22 @@ import Footer from "./Footer"
 const LandingPage = () => {
     return (
         <>
+            
             <Navbar />
-            <HeroSection />
-            <FeatureSection />
-            <Footer />
+      
+      <div id="hero">
+        <HeroSection/>
+      </div>
+
+      <div id="features">
+        <FeatureSection />
+      </div>
+
+      
+
+      <div id="contact-us">
+        <Footer />
+      </div>
             
         </>
     )

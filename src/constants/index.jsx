@@ -1,8 +1,9 @@
+
 export const navItems = [
-  { label: "Features", href: "#" },
-  { label: "Features", href: "#" },
-  { label: "Parent Dashboard", href: "#" },
-  { label: "Gaming", href: "#" },
+  { label: "Home", href: "#hero" },
+  { label: "Features", href: "#features" },
+  { label: "Parent Dashboard", href: "#parent-dashboard" },
+  { label: "Contact Us", href: "#contact-us" },
 ];
 
 
@@ -30,26 +31,20 @@ export const features = [
 ];
 
 
-export const resourcesLinks = [
-  { href: "#", text: "Getting Started" },
-  { href: "#", text: "Documentation" },
-  { href: "#", text: "Tutorials" },
-  { href: "#", text: "API Reference" },
-  { href: "#", text: "Community Forums" },
+
+
+export const collegeLinks = [
+  { href: "#", text: "N.M.A.M Institute of" },
+  { href: "#", text: "Technology, Nitte" },
+  { href: "#", text: "Karkala Taluk" },
+  { href: "#", text: "Udupi District" },
+  
 ];
 
-export const platformLinks = [
-  { href: "#", text: "Features" },
-  { href: "#", text: "Supported Devices" },
-  { href: "#", text: "System Requirements" },
-  { href: "#", text: "Downloads" },
-  { href: "#", text: "Release Notes" },
-];
-
-export const communityLinks = [
-  { href: "#", text: "Events" },
-  { href: "#", text: "Meetups" },
-  { href: "#", text: "Conferences" },
-  { href: "#", text: "Hackathons" },
-  { href: "#", text: "Jobs" },
+export const contactLinks = [
+  { href: "#", text: "7th Semester" },
+  { href: "#", text: "Computer Science Department" },
+  { href: "#", text: "Ph.   : +9189456120" },
+  { href: "#", text: "Email : semester@nmamit.in" },
+ 
 ];
