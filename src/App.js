@@ -87,7 +87,7 @@ function App() {
           {/* Update default route to LandingPage */}
           <Route path='/' element={<LandingPage />} />
 
-          <Route path='/login' element={isAuthenticated ? <Navigate to="/child" /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path='/login' element={isAuthenticated ? <Navigate to="/home" /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
 
           <Route path='/signup' element={<Signup />} />
 
