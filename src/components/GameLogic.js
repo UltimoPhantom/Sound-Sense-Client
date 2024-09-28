@@ -149,11 +149,9 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       this.scale = scale;
   
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
-        console.log("♨️open true♨️", this.tIDX);
         this.isOpen = true;
       } else {
         this.isOpen = false;
-        console.log("♨️open false♨️", this.tIDX);
       }
     }
   
@@ -218,7 +216,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
   function init() {
     player = new Player();
     const platformImage = createImage(platform);
-    const platformImage1 = createImage(platform1) //red color
+    const platformImage1 = createImage(platform1) 
     const backgroundImage = createImage(background);
     const hillsImage = createImage(hills);
     const platformSmallTallImage = createImage(platformSmallTall);
@@ -260,29 +258,6 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
     ];
 
     initTreasures();
-    // const treasureClosedImage = createImage(box_close_png);
-    // const treasureOpenImage = createImage(box_open_png);
-
-    // treasures = [
-    //   new Treasure({
-    //     x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2,
-    //     y: platforms[1].position.y - treasureClosedImage.height + 585,
-    //     imageClosed: treasureClosedImage,
-    //     imageOpen: treasureOpenImage,
-    //   }),
-    //   new Treasure({
-    //     x: 2870,
-    //     y: 90,
-    //     imageClosed: treasureClosedImage,
-    //     imageOpen: treasureOpenImage,
-    //   }),
-    //   new Treasure({
-    //     x: 5970,
-    //     y: 290,
-    //     imageClosed: treasureClosedImage,
-    //     imageOpen: treasureOpenImage,
-    //   }),
-    // ];
 
     keys = {
       right: { pressed: false },
@@ -333,17 +308,6 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         player.velocity.y = 0;
       }
     });
-
-    // treasures.forEach((treasure) => {
-    //   if (
-    //     player.position.y + player.height <= treasure.position.y &&
-    //     player.position.y + player.height + player.velocity.y >= treasure.position.y &&
-    //     player.position.x + player.width >= treasure.position.x &&
-    //     player.position.x <= treasure.position.x + treasure.width
-    //   ) {
-    //     treasure.open();
-    //   }
-    // });
 
     checkTreasureCollisions();
 
