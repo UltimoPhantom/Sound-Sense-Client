@@ -86,11 +86,11 @@ function App() {
     <BrowserRouter>
       <div className="App">
 
-      <div className='h-screen flex flex-col items-center gap-6 bg-black text-white'> 
+      {/* <div className='h-screen flex flex-col items-center gap-6 bg-black text-white'> 
             <h1 className='text-5xl font-bold mt-4'>Pop Model</h1>
             <button onClick={()=>setShowModal(true)} className='bg-violet-500 px-4 py-2 rounded-lg'>Open</button>
             {showModal && <Modal onClose={()=>setShowModal(false)} />}
-       </div>
+       </div> */}
 
 
         <Routes>

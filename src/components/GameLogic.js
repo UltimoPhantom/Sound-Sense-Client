@@ -14,10 +14,11 @@ import platformSmallTall1 from '../images/platformSmallTall1.png'
 
 export function initializeGame(canvas, playerPosition, treasureArray) {
   const c = canvas.getContext('2d');
-  canvas.width = window.innerWidth * .99;
-  canvas.height = window.innerHeight * 0.97;
+  canvas.width = window.innerWidth ;
+  canvas.height = window.innerHeight 
   var treasureIndex = 0
   var validTreasureIndex = []
+  console.log("♨️♨️",treasureArray);
 
   const gravity = 1.0;
   const jumpStrength = -20;
@@ -138,9 +139,8 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
   }
 
   class Treasure {
-    constructor({ tIDX, x, y, imageClosed, imageOpen, scale = 0.25, isOpen }) {
-      this.tIDX = tIDX    // tIDX: index of current treasure box
-      treasureIndex = treasureIndex + 1
+    constructor({ x, y, imageClosed, imageOpen, scale = 0.25 }) {
+      this.tIDX = treasureIndex++;
       this.position = { x, y };
       this.imageClosed = imageClosed;
       this.imageOpen = imageOpen;
@@ -149,42 +149,64 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       this.scale = scale;
   
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
+        console.log("♨️open true♨️", this.tIDX);
         this.isOpen = true;
       } else {
         this.isOpen = false;
-        // validTreasureIndex.push({
-        //   tIDX: tIDX,
-        //   position: this.position
-        // })
+        console.log("♨️open false♨️", this.tIDX);
       }
     }
   
     draw() {
-      if (this.isOpen) {
-        c.drawImage(
-          this.imageOpen,
-          this.position.x - cameraX,
-          this.position.y,
-          this.width,   
-          this.height    
-        );
-      } else {
-        c.drawImage(
-          this.imageClosed,
-          this.position.x - cameraX,
-          this.position.y,
-          this.width,    
-          this.height    
-        );
-      }
+      const image = this.isOpen ? this.imageOpen : this.imageClosed;
+      c.drawImage(
+        image,
+        this.position.x - cameraX,
+        this.position.y,
+        this.width,
+        this.height
+      );
     }
   
     open() {
-      this.isOpen = true;
-
+      if (!this.isOpen) {
+        this.isOpen = true;
+        console.log(`Treasure ${this.tIDX} opened`);
+        // You might want to add logic here to update the parent component
+        // For example: updateParentTreasureArray(this.tIDX);
+      }
     }
   }
+
+  function initTreasures() {
+    const treasureClosedImage = createImage(box_close_png);
+    const treasureOpenImage = createImage(box_open_png);
   
+    treasureIndex = 0; // Reset the index before creating new treasures
+  
+    treasures = [
+      new Treasure({
+        x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2,
+        y: platforms[1].position.y - treasureClosedImage.height + 585,
+        imageClosed: treasureClosedImage,
+        imageOpen: treasureOpenImage,
+      }),
+      new Treasure({
+        x: 2870,
+        y: 90,
+        imageClosed: treasureClosedImage,
+        imageOpen: treasureOpenImage,
+      }),
+      new Treasure({
+        x: 5970,
+        y: 290,
+        imageClosed: treasureClosedImage,
+        imageOpen: treasureOpenImage,
+      }),
+    ];
+  
+    console.log("Treasures initialized:", treasures.map(t => ({ tIDX: t.tIDX, isOpen: t.isOpen })));
+  }
 
   let player;
   let platforms;
@@ -237,44 +259,51 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       new GenericObject({ x: -1, y: -1, image: hillsImage }),
     ];
 
-    const treasureClosedImage = createImage(box_close_png);
-    const treasureOpenImage = createImage(box_open_png);
+    initTreasures();
+    // const treasureClosedImage = createImage(box_close_png);
+    // const treasureOpenImage = createImage(box_open_png);
 
-    treasures = [
-      new Treasure({
-        tIDX: treasureIndex++,
-        x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2, // Centered on the second platform
-        y: platforms[1].position.y - treasureClosedImage.height + 585, // Positioned above the platform
-        imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage,
-      }),
-      new Treasure({
-        tIDX: treasureArray++,
-        x: 2870,
-        y: 90,
-        // x: platforms[3].position.x + platforms[3].width / 2 - treasureClosedImage.width / 2, // Centered on the fourth platform
-        // y: platforms[3].position.y - treasureClosedImage.height + 385,
-        imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage,
-      }),
-      new Treasure({
-        tIDX: treasureArray++,
-        x: 5970,
-        y: 290,
-        // x: platforms[3].position.x + platforms[3].width / 2 - treasureClosedImage.width / 2, // Centered on the fourth platform
-        // y: platforms[3].position.y - treasureClosedImage.height + 385,
-        imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage,
-      }),
-    ];
+    // treasures = [
+    //   new Treasure({
+    //     x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2,
+    //     y: platforms[1].position.y - treasureClosedImage.height + 585,
+    //     imageClosed: treasureClosedImage,
+    //     imageOpen: treasureOpenImage,
+    //   }),
+    //   new Treasure({
+    //     x: 2870,
+    //     y: 90,
+    //     imageClosed: treasureClosedImage,
+    //     imageOpen: treasureOpenImage,
+    //   }),
+    //   new Treasure({
+    //     x: 5970,
+    //     y: 290,
+    //     imageClosed: treasureClosedImage,
+    //     imageOpen: treasureOpenImage,
+    //   }),
+    // ];
 
     keys = {
       right: { pressed: false },
       left: { pressed: false },
     };
+
   }
 
   function animate() {
+    function checkTreasureCollisions() {
+      treasures.forEach((treasure) => {
+        if (
+          player.position.x < treasure.position.x + treasure.width &&
+          player.position.x + player.width > treasure.position.x &&
+          player.position.y < treasure.position.y + treasure.height &&
+          player.position.y + player.height > treasure.position.y
+        ) {
+          treasure.open();
+        }
+      });
+    }
     requestAnimationFrame(animate);
     c.fillStyle = 'white';
     c.fillRect(0, 0, canvas.width, canvas.height);
@@ -305,16 +334,19 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       }
     });
 
-    treasures.forEach((treasure) => {
-      if (
-        player.position.y + player.height <= treasure.position.y &&
-        player.position.y + player.height + player.velocity.y >= treasure.position.y &&
-        player.position.x + player.width >= treasure.position.x &&
-        player.position.x <= treasure.position.x + treasure.width
-      ) {
-        treasure.open();
-      }
-    });
+    // treasures.forEach((treasure) => {
+    //   if (
+    //     player.position.y + player.height <= treasure.position.y &&
+    //     player.position.y + player.height + player.velocity.y >= treasure.position.y &&
+    //     player.position.x + player.width >= treasure.position.x &&
+    //     player.position.x <= treasure.position.x + treasure.width
+    //   ) {
+    //     treasure.open();
+    //   }
+    // });
+
+    checkTreasureCollisions();
+
 
     if (player.position.y >= 427) {
       init();
