@@ -6,12 +6,14 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import LandingPage from './pages/landing'
 import { ToastContainer } from 'react-toastify';
+import Modal from './pages/model';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [playerPosition, setPlayerPosition] = useState({ curr_x: 0, curr_y: 0 });
   const [treasureArray, setTreasureArray] = useState([])
+  const [showModal, setShowModal]=useState(false);
 
   const validateTokenAndSetAuth = async () => {
     const token = localStorage.getItem('token');
@@ -83,11 +85,21 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Routes>
-          {/* Update default route to LandingPage */}
-          <Route path='/' element={<LandingPage />} />
 
-          <Route path='/login' element={isAuthenticated ? <Navigate to="/child" /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
+      <div className='h-screen flex flex-col items-center gap-6 bg-black text-white'> 
+            <h1 className='text-5xl font-bold mt-4'>Pop Model</h1>
+            <button onClick={()=>setShowModal(true)} className='bg-violet-500 px-4 py-2 rounded-lg'>Open</button>
+            {showModal && <Modal onClose={()=>setShowModal(false)} />}
+       </div>
+
+
+        <Routes>
+
+           {/* <Route path='/' element={<Modal />} /> */}
+          
+
+
+          <Route path='/login' element={isAuthenticated ? <Navigate to="/home" /> : <Login setIsAuthenticated={setIsAuthenticated} />} />
 
           <Route path='/signup' element={<Signup />} />
 
