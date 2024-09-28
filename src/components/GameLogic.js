@@ -152,8 +152,8 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
         this.isOpen = true;
       } else {
-        this.isOpen = false;
         validTreasureIndex.push({ tIDX: this.tIDX, position: this.position });
+        this.isOpen = false;
       }
     }
   
@@ -268,14 +268,27 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
 
   function animate() {
     function checkTreasureCollisions() {
-      treasures.forEach((treasure) => {
-        if (
-          player.position.x < treasure.position.x + treasure.width &&
-          player.position.x + player.width > treasure.position.x &&
-          player.position.y < treasure.position.y + treasure.height &&
-          player.position.y + player.height > treasure.position.y
-        ) {
-          treasure.open();
+      const playerRange = 150; 
+    
+      validTreasureIndex.forEach(({ tIDX, position }) => {
+        const treasure = treasures[tIDX];
+        
+        const distanceX = Math.abs(player.position.x - position.x);
+        const distanceY = Math.abs(player.position.y - position.y);
+        
+        if (distanceX <= playerRange && distanceY <= playerRange) {
+          if (
+            player.position.x < position.x + treasure.width &&
+            player.position.x + player.width > position.x &&
+            player.position.y < position.y + treasure.height &&
+            player.position.y + player.height > position.y
+          ) {
+            treasure.open();
+            const index = validTreasureIndex.findIndex(item => item.tIDX === tIDX);
+            if (index !== -1) {
+              validTreasureIndex.splice(index, 1);
+            }
+          }
         }
       });
     }
