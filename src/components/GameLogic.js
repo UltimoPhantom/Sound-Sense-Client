@@ -109,6 +109,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
 
     logPosition() {
       console.log(`(${this.position.x.toFixed(2)}, ${this.position.y.toFixed(2)})`);
+      console.log("♨️vvv♨️", validTreasureIndex);
     }
   }
 
@@ -152,6 +153,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         this.isOpen = true;
       } else {
         this.isOpen = false;
+        validTreasureIndex.push({ tIDX: this.tIDX, position: this.position });
       }
     }
   
@@ -170,8 +172,6 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       if (!this.isOpen) {
         this.isOpen = true;
         console.log(`Treasure ${this.tIDX} opened`);
-        // You might want to add logic here to update the parent component
-        // For example: updateParentTreasureArray(this.tIDX);
       }
     }
   }
@@ -180,8 +180,8 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
     const treasureClosedImage = createImage(box_close_png);
     const treasureOpenImage = createImage(box_open_png);
   
-    treasureIndex = 0; // Reset the index before creating new treasures
-  
+    treasureIndex = 0; 
+
     treasures = [
       new Treasure({
         x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2,
@@ -279,6 +279,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         }
       });
     }
+    
     requestAnimationFrame(animate);
     c.fillStyle = 'white';
     c.fillRect(0, 0, canvas.width, canvas.height);
