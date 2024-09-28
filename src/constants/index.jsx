@@ -6,7 +6,11 @@ export const navItems = [
   { label: "Contact Us", href: "#contact-us" },
 ];
 
-
+export const homeNavItems = [
+  { label: "Children", href: "/child" },
+  { label: "Parents", href: "/parents" },
+  { label: "Dashboard", href: "/dashboard" },
+];
 export const features = [
   {
     text: "Speech Development Through Gaming",
