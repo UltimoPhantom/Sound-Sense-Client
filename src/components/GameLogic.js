@@ -18,7 +18,6 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
   canvas.height = window.innerHeight 
   var treasureIndex = 0
   var validTreasureIndex = []
-  console.log("♨️♨️",treasureArray);
 
   const gravity = 1.0;
   const jumpStrength = -20;
@@ -109,7 +108,6 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
 
     logPosition() {
       console.log(`(${this.position.x.toFixed(2)}, ${this.position.y.toFixed(2)})`);
-      console.log("♨️vvv♨️", validTreasureIndex);
     }
   }
 
@@ -268,7 +266,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
 
   function animate() {
     function checkTreasureCollisions() {
-      const playerRange = 150; 
+      const playerRange = 100; 
     
       validTreasureIndex.forEach(({ tIDX, position }) => {
         const treasure = treasures[tIDX];
