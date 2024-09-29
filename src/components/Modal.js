@@ -1,25 +1,30 @@
-// Modal.js
+// src/components/Modal.js
 import React, { useRef, useEffect, useState } from "react";
 import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat } from "lucide-react";
-import audioFile from '../videos/a.mp3'; 
-import kannada1 from '../images/aa.jpg'
+import image1 from '../images/l1_img1.jpg';
+import image2 from '../images/l1_img2.png';
+import image3 from '../images/l1_img3.jpg';
+
+import audio1 from '../videos/a.mp3';
 
 
-const Modal = ({ onClose }) => {
+const Modal = ({ onClose, data }) => { 
     const modalRef = useRef();
     const audioRef = useRef(null); 
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [isRepeating, setIsRepeating] = useState(false);
+    const [recording, setRecording] = useState(false);
+    const [audioURL, setAudioURL] = useState(null);
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
 
-    // Close modal when clicking outside the content
     const closeModal = (e) => {
         if (modalRef.current === e.target) {
             onClose();
         }
     };
 
-    // Close modal on pressing the 'Escape' key
     const handleEsc = (e) => {
         if (e.key === 'Escape') {
             onClose();
@@ -69,7 +74,7 @@ const Modal = ({ onClose }) => {
         }
     };
 
-    //  repeat loop functionality
+    // Repeat loop functionality
     const toggleRepeat = () => {
         if (audioRef.current) {
             audioRef.current.loop = !isRepeating;
@@ -79,6 +84,43 @@ const Modal = ({ onClose }) => {
 
     const handleAudioEnded = () => {
         setIsPlaying(false);
+    };
+
+    // Voice Recording Functions
+    const startRecording = async () => {
+        if (!navigator.mediaDevices) {
+            alert('Your browser does not support audio recording.');
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorderRef.current = new MediaRecorder(stream);
+            mediaRecorderRef.current.start();
+            setRecording(true);
+            audioChunksRef.current = [];
+
+            mediaRecorderRef.current.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    audioChunksRef.current.push(event.data);
+                }
+            };
+
+            mediaRecorderRef.current.onstop = () => {
+                const blob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                setAudioURL(url);
+            };
+        } catch (error) {
+            console.error("Error accessing microphone:", error);
+            alert('Could not access your microphone.');
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+            setRecording(false);
+        }
     };
 
     return (
@@ -98,13 +140,13 @@ const Modal = ({ onClose }) => {
 
                 <div className="p-6 flex flex-col items-center gap-4">
                     <img 
-                        src={kannada1}
+                        src={image1} 
                         alt="Descriptive Alt Text" 
                         className="w-32 h-32 object-cover rounded-full"
                     />
 
                     <p className="text-gray-800 text-center">
-                        This is a description of the image. It provides context and information about what is depicted above.
+                        {data ? data.taskDescription : "This is a description of the image. It provides context and information about what is depicted above."}
                     </p>
 
                     <button 
@@ -118,7 +160,7 @@ const Modal = ({ onClose }) => {
 
                     <audio 
                         ref={audioRef} 
-                        src={audioFile} 
+                        src={audio1}
                         onEnded={handleAudioEnded} 
                     />
 
@@ -153,16 +195,25 @@ const Modal = ({ onClose }) => {
                     </p>
 
                     {/* Voice Record Button */}
-                    <button 
-                        className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-                        onClick={() => {
-                            // we need to write pyhon logic to record the voice from children
-                        }}
-                        aria-label="Record Voice"
-                    >
-                        <Mic size={20} />
-                        Record Your Voice
-                    </button>
+                    <div className="mt-4 w-full">
+                        <button 
+                            className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition w-full"
+                            onClick={recording ? stopRecording : startRecording}
+                            aria-label={recording ? "Stop Recording" : "Record Voice"}
+                        >
+                            <Mic size={20} />
+                            {recording ? 'Stop Recording' : 'Record Your Voice'}
+                        </button>
+
+                        {audioURL && (
+                            <div className="mt-2 w-full flex flex-col items-center">
+                                <audio src={audioURL} controls className="w-full" />
+                                <a href={audioURL} download="recording.wav" className="text-blue-500 underline mt-2">
+                                    Download Recording
+                                </a>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+// src/components/GameLogic.js
 import platform from '../images/platform.png';
 import hills from '../images/hills.png';
 import background from '../images/background.png';
@@ -9,18 +9,25 @@ import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
 import box_open_png from '../images/box_open_png.png';
 import box_close_png from '../images/box_close_png.png';
-import platform1 from '../images/platform1.jpg'
-import platformSmallTall1 from '../images/platformSmallTall1.png'
+import platform1 from '../images/platform1.jpg';
+import platformSmallTall1 from '../images/platformSmallTall1.png';
+import image1 from '../images/l1_img1.jpg';
+import image2 from '../images/l1_img2.png';
+import image3 from '../images/l1_img3.jpg';
 
-export function initializeGame(canvas, playerPosition, treasureArray) {
+import audio1 from '../videos/a.mp3';
+
+export function initializeGame(canvas, playerPosition, treasureArray, onTreasureOpen) {
   const c = canvas.getContext('2d');
-  canvas.width = window.innerWidth ;
-  canvas.height = window.innerHeight 
-  var treasureIndex = 0
-  var validTreasureIndex = []
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let treasureIndex = 0;
+  let validTreasureIndex = [];
 
   const gravity = 1.0;
   const jumpStrength = -20;
+  let isPaused = false;
+  let animationFrameId;
 
   function createImage(src) {
     const image = new Image();
@@ -138,7 +145,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
   }
 
   class Treasure {
-    constructor({ x, y, imageClosed, imageOpen, scale = 0.25 }) {
+    constructor({ x, y, imageClosed, imageOpen, scale = 0.25, taskDescription }) {
       this.tIDX = treasureIndex++;
       this.position = { x, y };
       this.imageClosed = imageClosed;
@@ -146,7 +153,8 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       this.width = imageClosed.width * scale;
       this.height = imageClosed.height * scale;
       this.scale = scale;
-  
+      this.taskDescription = taskDescription; // Added taskDescription
+
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
         this.isOpen = true;
       } else {
@@ -154,7 +162,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         this.isOpen = false;
       }
     }
-  
+
     draw() {
       const image = this.isOpen ? this.imageOpen : this.imageClosed;
       c.drawImage(
@@ -165,11 +173,15 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         this.height
       );
     }
-  
+
     open() {
       if (!this.isOpen) {
         this.isOpen = true;
         console.log(`Treasure ${this.tIDX} opened`);
+        
+        if (onTreasureOpen) {
+          onTreasureOpen(this); 
+        }
       }
     }
   }
@@ -186,19 +198,32 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         y: platforms[1].position.y - treasureClosedImage.height + 585,
         imageClosed: treasureClosedImage,
         imageOpen: treasureOpenImage,
+        taskDescription: "Say the word 'apple' correctly!", 
+        // image: { image1 }, 
+        // audio: {audio1}, 
       }),
       new Treasure({
         x: 2870,
         y: 90,
         imageClosed: treasureClosedImage,
         imageOpen: treasureOpenImage,
+        taskDescription: "Pronounce the word 'banana'!",
+        // image: { image2 },
+        // audio: {audio1}, 
+
       }),
       new Treasure({
         x: 5970,
         y: 290,
         imageClosed: treasureClosedImage,
         imageOpen: treasureOpenImage,
+        taskDescription: "Repeat the phrase 'I can speak!'", 
+        // image: {image3}, 
+        // audio: {audio1}, 
       }),
+
+      
+
     ];
   
     console.log("Treasures initialized:", treasures.map(t => ({ tIDX: t.tIDX, isOpen: t.isOpen })));
@@ -207,20 +232,19 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
   let player;
   let platforms;
   let genericObjects;
-  let treasures;
+  let treasures = [];
   let keys;
   let cameraX = 0;
 
   function init() {
     player = new Player();
     const platformImage = createImage(platform);
-    const platformImage1 = createImage(platform1) 
+    const platformImage1 = createImage(platform1);
     const backgroundImage = createImage(background);
     const hillsImage = createImage(hills);
     const platformSmallTallImage = createImage(platformSmallTall);
 
     platforms = [
-      // new Platform({ x: platformImage.width + 300 - 2 + platformImage.width - platformSmallTallImage.width, y: 270, image: platformSmallTallImage }),
       new Platform({ x: -1, y: 470, image: platformImage }),
       new Platform({ x: platformImage.width , y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
@@ -239,14 +263,7 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       new Platform({ x: (platformImage1.width + 50) * 14 + 100, y: 470, image: platformImage1 }),
 
       new Platform({ x: (platformImage1.width + 50) * 15 + 50, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 16 - 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 17 - 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 18 - 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 19 - 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 20 - 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 21 - 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 22 - 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 23 - 300, y: 470, image: platformImage1 }),
+    
     ];
 
     genericObjects = [
@@ -261,19 +278,22 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
       right: { pressed: false },
       left: { pressed: false },
     };
-
   }
 
   function animate() {
+    if (isPaused) {
+      return; // Exit the animation loop if the game is paused
+    }
+
     function checkTreasureCollisions() {
       const playerRange = 100; 
-    
+
       validTreasureIndex.forEach(({ tIDX, position }) => {
         const treasure = treasures[tIDX];
-        
+
         const distanceX = Math.abs(player.position.x - position.x);
         const distanceY = Math.abs(player.position.y - position.y);
-        
+
         if (distanceX <= playerRange && distanceY <= playerRange) {
           if (
             player.position.x < position.x + treasure.width &&
@@ -290,8 +310,8 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         }
       });
     }
-    
-    requestAnimationFrame(animate);
+
+    animationFrameId = requestAnimationFrame(animate);
     c.fillStyle = 'white';
     c.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -322,7 +342,6 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
     });
 
     checkTreasureCollisions();
-
 
     if (player.position.y >= 427) {
       init();
@@ -372,4 +391,19 @@ export function initializeGame(canvas, playerPosition, treasureArray) {
         break;
     }
   });
+
+  // Control functions
+  const pause = () => {
+    isPaused = true;
+    cancelAnimationFrame(animationFrameId);
+  };
+
+  const resume = () => {
+    if (isPaused) {
+      isPaused = false;
+      animate();
+    }
+  };
+
+  return { pause, resume };
 }
