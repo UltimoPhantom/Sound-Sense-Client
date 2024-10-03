@@ -15,7 +15,7 @@ import image1 from '../images/l1_img1.jpg';
 import image2 from '../images/l1_img2.png';
 import image3 from '../images/l1_img3.jpg';
 
-import audio1 from '../videos/a.mp3';
+// import audio1 from '../videos/a.mp3';
 
 export function initializeGame(canvas, playerPosition, treasureArray, onTreasureOpen) {
   const c = canvas.getContext('2d');
@@ -207,7 +207,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
         y: 90,
         imageClosed: treasureClosedImage,
         imageOpen: treasureOpenImage,
-        taskDescription: "Pronounce the word 'banana'!",
+        taskDescription: "Pronounce the above word! ",
         // image: { image2 },
         // audio: {audio1}, 
 
@@ -312,7 +312,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     }
 
     animationFrameId = requestAnimationFrame(animate);
-    c.fillStyle = 'white';
+    c.fillStyle = 'black';
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     genericObjects.forEach((genericObject) => genericObject.draw());

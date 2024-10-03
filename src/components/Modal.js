@@ -5,7 +5,7 @@ import image1 from '../images/l1_img1.jpg';
 import image2 from '../images/l1_img2.png';
 import image3 from '../images/l1_img3.jpg';
 
-import audio1 from '../videos/a.mp3';
+import audio1 from '../videos/a.wav';
 
 
 const Modal = ({ onClose, data }) => { 
