@@ -9,3 +9,56 @@
   font-family: "Poppins","sans-serif";
   color-scheme: dark;
 }
+
+/* Add this to your CSS file */
+.home-container {
+  background-color: #000; /* Black background */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.content h1 {
+  color: #fff; /* White text */
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.navbar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.navbar-user {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+
+.navbar-button {
+  background: linear-gradient(90deg, #f72585, #7209b7); /* Gradient similar to the button in the image */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background 0.3s ease;
+}
+
+.navbar-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #b5179e, #560bad);
+}
+
+h1 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
