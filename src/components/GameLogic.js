@@ -1,4 +1,3 @@
-// src/components/GameLogic.js
 import platform from '../images/platform.png';
 import hills from '../images/hills.png';
 import background from '../images/background.png';
@@ -7,13 +6,8 @@ import spriteRunLeft from '../images/spriteRunLeft.png';
 import spriteRunRight from '../images/spriteRunRight.png';
 import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
-import box_open_png from '../images/box_open_png.png';
-import box_close_png from '../images/box_close_png.png';
 import platform1 from '../images/platform1.jpg';
-import platformSmallTall1 from '../images/platformSmallTall1.png';
-import image1 from '../images/l1_img1.jpg';
-import image2 from '../images/l1_img2.png';
-import image3 from '../images/l1_img3.jpg';
+import createTreasureContent from './treasureContent';
 
 // import audio1 from '../videos/a.mp3';
 
@@ -153,7 +147,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       this.width = imageClosed.width * scale;
       this.height = imageClosed.height * scale;
       this.scale = scale;
-      this.taskDescription = taskDescription; // Added taskDescription
+      this.taskDescription = taskDescription;
+      this.letter = 'ಆ'  // init to ahha
 
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
         this.isOpen = true;
@@ -187,44 +182,17 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
   }
 
   function initTreasures() {
-    const treasureClosedImage = createImage(box_close_png);
-    const treasureOpenImage = createImage(box_open_png);
-  
-    treasureIndex = 0; 
+    const treasureContent = createTreasureContent(platforms);
+    treasureIndex = 0;
 
-    treasures = [
-      new Treasure({
-        x: platforms[1].position.x + platforms[1].width / 2 - treasureClosedImage.width / 2,
-        y: platforms[1].position.y - treasureClosedImage.height + 585,
-        imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage,
-        taskDescription: "Say the word 'apple' correctly!", 
-        // image: { image1 }, 
-        // audio: {audio1}, 
-      }),
-      new Treasure({
-        x: 2870,
-        y: 90,
-        imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage,
-        taskDescription: "Pronounce the above word! ",
-        // image: { image2 },
-        // audio: {audio1}, 
-
-      }),
-      new Treasure({
-        x: 5970,
-        y: 290,
-        imageClosed: treasureClosedImage,
-        imageOpen: treasureOpenImage,
-        taskDescription: "Repeat the phrase 'I can speak!'", 
-        // image: {image3}, 
-        // audio: {audio1}, 
-      }),
-
-      
-
-    ];
+    treasures = treasureContent.map(content => new Treasure({
+      x: content.x,
+      y: content.y,
+      imageClosed: createImage(content.imageClosed),
+      imageOpen: createImage(content.imageOpen),
+      taskDescription: content.taskDescription,
+      // You can add more properties here if needed
+    }));
   
     console.log("Treasures initialized:", treasures.map(t => ({ tIDX: t.tIDX, isOpen: t.isOpen })));
   }
