@@ -1,12 +1,7 @@
-// src/components/Modal.js
 import React, { useRef, useEffect, useState } from "react";
 import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat } from "lucide-react";
 import image1 from '../images/l1_img1.jpg';
-import image2 from '../images/l1_img2.png';
-import image3 from '../images/l1_img3.jpg';
-
 import audio1 from '../videos/a.wav';
-
 
 const Modal = ({ onClose, data }) => { 
     const modalRef = useRef();
@@ -38,7 +33,6 @@ const Modal = ({ onClose, data }) => {
         };
     }, []);
 
-    // Play the audio
     const playAudio = () => {
         if (audioRef.current) {
             audioRef.current.play().then(() => {
@@ -49,7 +43,6 @@ const Modal = ({ onClose, data }) => {
         }
     };
 
-    // Pause the audio
     const pauseAudio = () => {
         if (audioRef.current) {
             audioRef.current.pause();
@@ -57,7 +50,6 @@ const Modal = ({ onClose, data }) => {
         }
     };
 
-    // Toggle play/pause
     const togglePlayPause = () => {
         if (isPlaying) {
             pauseAudio();
@@ -66,7 +58,6 @@ const Modal = ({ onClose, data }) => {
         }
     };
 
-    // Restart the audio
     const restartAudio = () => {
         if (audioRef.current) {
             audioRef.current.currentTime = 0;
@@ -74,7 +65,6 @@ const Modal = ({ onClose, data }) => {
         }
     };
 
-    // Repeat loop functionality
     const toggleRepeat = () => {
         if (audioRef.current) {
             audioRef.current.loop = !isRepeating;
@@ -120,6 +110,37 @@ const Modal = ({ onClose, data }) => {
         if (mediaRecorderRef.current) {
             mediaRecorderRef.current.stop();
             setRecording(false);
+        }
+    };
+
+    // Function to submit the audio file to the Flask server
+    const submitAudio = async () => {
+        if (!audioURL) {
+            alert('No audio recorded to submit.');
+            return;
+        }
+
+        // Sending the recorded audio Blob URL to the Flask API
+        const formData = new FormData();
+        const response = await fetch(audioURL);
+        const blob = await response.blob();
+
+        formData.append('file', blob, 'recording.wav');  // File as Blob
+
+        try {
+            const res = await fetch('http://127.0.0.1:5000/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            if (res.ok) {
+                const data = await res.json();
+                alert(`Server Response: ${data.message}`);
+            } else {
+                alert('Failed to upload audio.');
+            }
+        } catch (error) {
+            console.error('Error submitting the audio file:', error);
+            alert('Error submitting the audio.');
         }
     };
 
@@ -213,6 +234,17 @@ const Modal = ({ onClose, data }) => {
                                 </a>
                             </div>
                         )}
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="mt-4 w-full">
+                        <button 
+                            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition w-full"
+                            onClick={submitAudio}
+                            aria-label="Submit Recording"
+                        >
+                            Submit Recording
+                        </button>
                     </div>
                 </div>
             </div>
