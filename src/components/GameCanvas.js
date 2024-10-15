@@ -24,7 +24,8 @@ const GameCanvas = ({ playerPosition, treasureArray }) => {
     const handleTreasureOpen = (treasure) => {
       setModalData({
         taskDescription: treasure.taskDescription,
-        image: treasure.image,
+        letterImage: treasure.letterImage,
+        letter: treasure.letter,
         audio: treasure.audio,
       });
       setShowModal(true);
