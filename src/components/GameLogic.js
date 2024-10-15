@@ -139,7 +139,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
   }
 
   class Treasure {
-    constructor({ x, y, imageClosed, imageOpen, scale = 0.25, taskDescription }) {
+    constructor({ x, y, imageClosed, imageOpen, scale = 0.25, taskDescription, letter, letterImage }) {
       this.tIDX = treasureIndex++;
       this.position = { x, y };
       this.imageClosed = imageClosed;
@@ -148,7 +148,9 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       this.height = imageClosed.height * scale;
       this.scale = scale;
       this.taskDescription = taskDescription;
-      this.letter = 'ಆ'  // init to ahha
+      this.letter = letter;
+      this.letterImage = letterImage;
+
 
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
         this.isOpen = true;
@@ -191,6 +193,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       imageClosed: createImage(content.imageClosed),
       imageOpen: createImage(content.imageOpen),
       taskDescription: content.taskDescription,
+      letterImage: content.letterImage,
+      letter: content.letter
       // You can add more properties here if needed
     }));
   
