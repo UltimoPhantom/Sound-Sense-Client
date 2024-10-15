@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat } from "lucide-react";
-import image1 from '../images/l1_img1.jpg';
 import audio1 from '../videos/a.wav';
+import image1 from '../images/l1_img1.jpg'
 
 const Modal = ({ onClose, data }) => { 
     const modalRef = useRef();
@@ -27,6 +27,7 @@ const Modal = ({ onClose, data }) => {
     };
 
     useEffect(() => {
+        console.log("♨️♨️", data);
         document.addEventListener('keydown', handleEsc, false);
         return () => {
             document.removeEventListener('keydown', handleEsc, false);
@@ -161,13 +162,19 @@ const Modal = ({ onClose, data }) => {
 
                 <div className="p-6 flex flex-col items-center gap-4">
                     <img 
-                        src={image1} 
+                        src={data ? data.letterImage : image1} 
                         alt="Descriptive Alt Text" 
                         className="w-32 h-32 object-cover rounded-full"
                     />
 
                     <p className="text-gray-800 text-center">
                         {data ? data.taskDescription : "This is a description of the image. It provides context and information about what is depicted above."}
+                    </p>
+
+                    <p>Hell WOrld</p>
+
+                    <p className="text-grey-800 text-center">
+                        {data ? data.letter : "Hello"}
                     </p>
 
                     <button 
