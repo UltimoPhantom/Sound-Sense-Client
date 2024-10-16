@@ -191,28 +191,30 @@ const Modal = ({ onClose, data }) => {
       alert('No audio recorded to submit.');
       return;
     }
-
+  
     const formData = new FormData();
     const response = await fetch(audioURL);
     const blob = await response.blob();
     formData.append('file', blob, 'recording.wav');
-
+  
     try {
       const res = await fetch('http://127.0.0.1:5000/transcribe', {
         method: 'POST',
         body: formData,
+        mode: 'cors',  // Add this line
       });
       if (res.ok) {
-        const data = await res.json();
-        alert(`Server Response: ${data.message}`);
+        const apiRes = await res.json();
+        alert(`Server Response: ${apiRes.message}`);
+        console.log("♨️♨️", apiRes.message);
       } else {
         alert('Failed to upload audio.');
       }
     } catch (error) {
       console.error('Error submitting the audio file:', error);
-      alert('Error submitting the audio.');
     }
   };
+  
 
   return (
     <div 
