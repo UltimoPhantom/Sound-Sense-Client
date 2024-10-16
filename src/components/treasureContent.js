@@ -22,7 +22,7 @@ const createTreasureContent = () => [
   imageOpen: box_open_png,
   taskDescription: "Pronounce the above word!",
   letterImage: image1,
-  letter: "lete111"
+  letter: "ಆ"
   // audio: audio1,
 },
 {
