@@ -195,7 +195,6 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       taskDescription: content.taskDescription,
       letterImage: content.letterImage,
       letter: content.letter
-      // You can add more properties here if needed
     }));
   
     console.log("Treasures initialized:", treasures.map(t => ({ tIDX: t.tIDX, isOpen: t.isOpen })));

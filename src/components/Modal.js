@@ -201,12 +201,18 @@ const Modal = ({ onClose, data }) => {
       const res = await fetch('http://127.0.0.1:5000/transcribe', {
         method: 'POST',
         body: formData,
-        mode: 'cors',  // Add this line
+        mode: 'cors',  
       });
       if (res.ok) {
         const apiRes = await res.json();
         alert(`Server Response: ${apiRes.message}`);
         console.log("♨️♨️", apiRes.message);
+        console.log("♨️♨️", "*********", data);
+        // validating the letter with actual letter
+        if(apiRes.message == data.letter) {
+          console.log("♨️♨️", "ITS CORRECT");
+        }
+
       } else {
         alert('Failed to upload audio.');
       }

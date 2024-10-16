@@ -23,6 +23,7 @@ const GameCanvas = ({ playerPosition, treasureArray }) => {
 
     const handleTreasureOpen = (treasure) => {
       setModalData({
+        ttIDX: treasure.tIDX,
         taskDescription: treasure.taskDescription,
         letterImage: treasure.letterImage,
         letter: treasure.letter,
