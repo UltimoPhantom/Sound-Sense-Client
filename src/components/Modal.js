@@ -38,6 +38,18 @@ const Modal = ({ onClose, data }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const playAudio = () => {
     if (audioRef.current) {
       audioRef.current.play().then(() => {
@@ -303,6 +315,21 @@ const Modal = ({ onClose, data }) => {
       onClick={closeModal} 
       className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50"
     >
+      {showConfetti && (
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          <Confetti
+            width={windowDimensions.width}
+            height={windowDimensions.height}
+            recycle={true}
+            numberOfPieces={500}
+            gravity={0.3}
+            initialVelocityY={20}
+            tweenDuration={100}
+            wind={0.05}
+            origin={{ x: 0.5, y: 0 }}
+          />
+        </div>
+      )}
       <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md mx-4">
         <button 
           onClick={onClose} 
