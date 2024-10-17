@@ -33,7 +33,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     constructor() {
       this.width = 66;
       this.height = 150;
-      this.speed = 10;
+      this.speed = 5; // Reduced from 10 to 5
       this.frames = 0;
       this.sprites = {
         stand: {
@@ -55,6 +55,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       this.reset(playerPosition);
     }
 
+
     reset(position) {
       this.position = {
         x: position.curr_x || 100,
@@ -64,20 +65,6 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
         x: 0,
         y: 0,
       };
-    }
-
-    draw() {
-      c.drawImage(
-        this.currentSprite,
-        this.currentCropWidth * this.frames,
-        0,
-        this.currentCropWidth,
-        400,
-        this.position.x - cameraX,
-        this.position.y,
-        this.width,
-        this.height
-      );
     }
 
     update() {
@@ -95,6 +82,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       )
         this.frames = 0;
 
+      this.draw();
+
       this.position.x += this.velocity.x;
       this.position.y += this.velocity.y;
 
@@ -103,8 +92,20 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       } else {
         this.velocity.y = 0;
       }
+    }
 
-      this.draw();
+    draw() {
+      c.drawImage(
+        this.currentSprite,
+        this.currentCropWidth * Math.floor(this.frames / 2), // Slow down animation
+        0,
+        this.currentCropWidth,
+        400,
+        this.position.x - cameraX,
+        this.position.y,
+        this.width,
+        this.height
+      );
     }
 
     logPosition() {
