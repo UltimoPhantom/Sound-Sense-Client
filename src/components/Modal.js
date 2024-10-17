@@ -265,7 +265,27 @@ const Modal = ({ onClose, data }) => {
     }
   };
   
+  const collectTreasure = async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:5000/player/addTreasureBox', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
+        },
+        body: JSON.stringify({ treasureIndex: 0 }), // Replace with actual treasure index
+      });
   
+      if (res.ok) {
+        const result = await res.json();
+        console.log('Treasure Collected');
+      } else {
+        console.error('Error collecting treasure.');
+      }
+    } catch (err) {
+      console.error('Failed to collect treasure:', err);
+    }
+  };
 
   return (
     <div 
