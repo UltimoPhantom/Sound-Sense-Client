@@ -140,6 +140,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
 
   class Treasure {
     constructor({ x, y, imageClosed, imageOpen, scale = 0.25, taskDescription, letter, letterImage }) {
+      this.x = x;
+      this.y = y;
       this.tIDX = treasureIndex++;
       this.position = { x, y };
       this.imageClosed = imageClosed;
@@ -150,7 +152,6 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       this.taskDescription = taskDescription;
       this.letter = letter;
       this.letterImage = letterImage;
-
 
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
         this.isOpen = true;
