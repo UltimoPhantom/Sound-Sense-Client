@@ -203,8 +203,8 @@ const Modal = ({ onClose, data }) => {
       });
       if (res.ok) {
         const apiRes = await res.json();
-        alert(`Server Response: ${apiRes.message}`);
-        console.log("♨️♨️", apiRes.message);
+        // alert(`Server Response: ${apiRes.message}`);
+        console.log("♨️RESULT LETTER: ♨️", apiRes.message);
         if(apiRes.message === data.letter) {
           console.log("♨️♨️", "ITS CORRECT");
   
@@ -223,14 +223,14 @@ const Modal = ({ onClose, data }) => {
 
   const updateScore = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:5000/player/addScore', {
+      const res = await fetch('http://localhost:8080/player/addScore', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         mode: 'cors',  
-        body: JSON.stringify({ level: 1 }), 
+        body: JSON.stringify({ level: 1 }) 
       });
   
       if (res.ok) {
@@ -247,14 +247,14 @@ const Modal = ({ onClose, data }) => {
 
   const updateCoordinates = async (newX, newY) => {
     try {
-      const res = await fetch('http://127.0.0.1:5000/player/updateCoordinates', {
+      const res = await fetch('http://localhost:8080/player/updateCoordinates', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, 
         },
         mode: 'cors',  
-        body: JSON.stringify({ newX, newY }), 
+        body: JSON.stringify({ newX, newY })
       });
   
       if (res.ok) {
@@ -271,7 +271,7 @@ const Modal = ({ onClose, data }) => {
   
   const collectTreasure = async (treasureIndex) => {
     try {
-      const res = await fetch('http://127.0.0.1:5000/player/addTreasureBox', {
+      const res = await fetch('http://localhost:8080/player/addTreasureBox', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
