@@ -1,8 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat } from "lucide-react";
-import audio1 from '../videos/a.wav';
-import image1 from '../images/l1_img1.jpg';
-import Confetti from "./Confetti";
+import Confetti from 'react-confetti';
 
 const Modal = ({ onClose, data }) => {
   const modalRef = useRef();
@@ -14,6 +12,12 @@ const Modal = ({ onClose, data }) => {
   const [audioURL, setAudioURL] = useState(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [windowDimensions, setWindowDimensions] = useState({ 
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
 
   const closeModal = (e) => {
     if (modalRef.current === e.target) {
