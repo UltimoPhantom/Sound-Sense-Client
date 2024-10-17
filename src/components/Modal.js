@@ -220,6 +220,30 @@ const Modal = ({ onClose, data }) => {
       console.error('Error submitting the audio file:', error);
     }
   };
+
+  const updateScore = async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:5000/player/addScore', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
+        },
+        body: JSON.stringify({ level: 1 }), // Modify the level as necessary
+      });
+  
+      if (res.ok) {
+        const result = await res.json();
+        console.log(`Updated Score: ${result.score}`);
+      } else {
+        console.error('Error updating score.');
+      }
+    } catch (err) {
+      console.error('Failed to update score:', err);
+    }
+  };
+
+ 
   
 
   return (
