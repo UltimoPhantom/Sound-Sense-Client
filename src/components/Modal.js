@@ -207,17 +207,13 @@ const Modal = ({ onClose, data }) => {
         const apiRes = await res.json();
         alert(`Server Response: ${apiRes.message}`);
         console.log("♨️♨️", apiRes.message);
-        if(apiRes.message == data.letter) {
+        if(apiRes.message === data.letter) {
           console.log("♨️♨️", "ITS CORRECT");
-
+  
           await updateScore();
-          
           await collectTreasure(data.ttIDX);
-
-          await updateCoordinates();
-
+          await updateCoordinates(); 
         }
-
       } else {
         alert('Failed to upload audio.');
       }
@@ -225,6 +221,7 @@ const Modal = ({ onClose, data }) => {
       console.error('Error submitting the audio file:', error);
     }
   };
+  
 
   const updateScore = async () => {
     try {
@@ -232,9 +229,10 @@ const Modal = ({ onClose, data }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from storage
         },
-        body: JSON.stringify({ level: 1 }), // Modify the level as necessary
+        mode: 'cors',  
+        body: JSON.stringify({ level: 1 }), // Adjust the level as needed
       });
   
       if (res.ok) {
@@ -247,6 +245,7 @@ const Modal = ({ onClose, data }) => {
       console.error('Failed to update score:', err);
     }
   };
+  
 
   const updateCoordinates = async (newX, newY) => {
     try {
@@ -254,9 +253,10 @@ const Modal = ({ onClose, data }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from storage
         },
-        body: JSON.stringify({ newX, newY }), // Replace with actual new coordinates
+        mode: 'cors',  
+        body: JSON.stringify({ newX, newY }), // Use actual new coordinates
       });
   
       if (res.ok) {
@@ -270,15 +270,17 @@ const Modal = ({ onClose, data }) => {
     }
   };
   
+  
   const collectTreasure = async (treasureIndex) => {
     try {
       const res = await fetch('http://127.0.0.1:5000/player/addTreasureBox', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from storage
         },
-        body: JSON.stringify({ treasureIndex }), // Replace with actual treasure index
+        mode: 'cors',  
+        body: JSON.stringify({ treasureIndex }), // Use actual treasure index
       });
   
       if (res.ok) {
@@ -291,7 +293,7 @@ const Modal = ({ onClose, data }) => {
       console.error('Failed to collect treasure:', err);
     }
   };
-
+  
   return (
     <div 
       ref={modalRef} 

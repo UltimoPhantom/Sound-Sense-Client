@@ -32,7 +32,7 @@ const createTreasureContent = () => [
   imageOpen: box_open_png,
   taskDescription: "Repeat the phrase 'I can speak!'",
   letterImage: image3,
-  letter: 'ಏ' 
+  letter: 'ಹಾ' 
   // audio: audio1,
 },
 ];
