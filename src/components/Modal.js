@@ -191,7 +191,7 @@ const Modal = ({ onClose, data }) => {
       alert('No audio recorded to submit.');
       return;
     }
-  
+    console.log("♨️treasure Contents: ♨️", data);
     const formData = new FormData();
     const response = await fetch(audioURL);
     const blob = await response.blob();
@@ -207,10 +207,15 @@ const Modal = ({ onClose, data }) => {
         const apiRes = await res.json();
         alert(`Server Response: ${apiRes.message}`);
         console.log("♨️♨️", apiRes.message);
-        console.log("♨️♨️", "*********", data);
-        // validating the letter with actual letter
         if(apiRes.message == data.letter) {
           console.log("♨️♨️", "ITS CORRECT");
+
+          await updateScore();
+          
+          await collectTreasure(data.ttIDX);
+
+          await updateCoordinates();
+
         }
 
       } else {
@@ -243,7 +248,7 @@ const Modal = ({ onClose, data }) => {
     }
   };
 
-  const updateCoordinates = async () => {
+  const updateCoordinates = async (newX, newY) => {
     try {
       const res = await fetch('http://127.0.0.1:5000/player/updateCoordinates', {
         method: 'POST',
@@ -251,7 +256,7 @@ const Modal = ({ onClose, data }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
         },
-        body: JSON.stringify({ newX: 150, newY: 250 }), // Replace with actual new coordinates
+        body: JSON.stringify({ newX, newY }), // Replace with actual new coordinates
       });
   
       if (res.ok) {
@@ -265,7 +270,7 @@ const Modal = ({ onClose, data }) => {
     }
   };
   
-  const collectTreasure = async () => {
+  const collectTreasure = async (treasureIndex) => {
     try {
       const res = await fetch('http://127.0.0.1:5000/player/addTreasureBox', {
         method: 'POST',
@@ -273,7 +278,7 @@ const Modal = ({ onClose, data }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
         },
-        body: JSON.stringify({ treasureIndex: 0 }), // Replace with actual treasure index
+        body: JSON.stringify({ treasureIndex }), // Replace with actual treasure index
       });
   
       if (res.ok) {
