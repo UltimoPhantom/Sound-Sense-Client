@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat } from "lucide-react";
 import audio1 from '../videos/a.wav';
 import image1 from '../images/l1_img1.jpg';
+import Confetti from "./Confetti";
 
 const Modal = ({ onClose, data }) => {
   const modalRef = useRef();
@@ -304,6 +305,7 @@ const Modal = ({ onClose, data }) => {
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
           aria-label="Close Modal"
         >
+        <Confetti />
           <X size={24} />
         </button>
 
