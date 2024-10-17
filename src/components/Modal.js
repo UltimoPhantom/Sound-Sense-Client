@@ -243,7 +243,28 @@ const Modal = ({ onClose, data }) => {
     }
   };
 
- 
+  const updateCoordinates = async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:5000/player/updateCoordinates', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust the token retrieval as needed
+        },
+        body: JSON.stringify({ newX: 150, newY: 250 }), // Replace with actual new coordinates
+      });
+  
+      if (res.ok) {
+        const result = await res.json();
+        console.log(`Updated Coordinates: X=${result.curr_x}, Y=${result.curr_y}`);
+      } else {
+        console.error('Error updating coordinates.');
+      }
+    } catch (err) {
+      console.error('Failed to update coordinates:', err);
+    }
+  };
+  
   
 
   return (
