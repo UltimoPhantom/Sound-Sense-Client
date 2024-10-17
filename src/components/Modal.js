@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat } from "lucide-react";
-import audio1 from '../videos/a.wav';
-import image1 from '../images/l1_img1.jpg';
+import Confetti from 'react-confetti';
 
 const Modal = ({ onClose, data }) => {
   const modalRef = useRef();
@@ -13,6 +12,12 @@ const Modal = ({ onClose, data }) => {
   const [audioURL, setAudioURL] = useState(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [windowDimensions, setWindowDimensions] = useState({ 
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
 
   const closeModal = (e) => {
     if (modalRef.current === e.target) {
@@ -31,6 +36,18 @@ const Modal = ({ onClose, data }) => {
     return () => {
       document.removeEventListener('keydown', handleEsc, false);
     };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const playAudio = () => {
@@ -203,14 +220,26 @@ const Modal = ({ onClose, data }) => {
       });
       if (res.ok) {
         const apiRes = await res.json();
-        // alert(`Server Response: ${apiRes.message}`);
         console.log("♨️RESULT LETTER: ♨️", apiRes.message);
         if(apiRes.message === data.letter) {
           console.log("♨️♨️", "ITS CORRECT");
   
           await updateScore();
           await collectTreasure(data.ttIDX);
-          await updateCoordinates(data.x, data.y); 
+          await updateCoordinates(data.x, data.y);
+          
+          // Show confetti
+          setShowConfetti(true);
+          
+          // Hide confetti after 3 seconds
+          setTimeout(() => {
+            setShowConfetti(false);
+          }, 3000);
+
+          // Refresh page after 4 seconds (3s confetti + 1s delay)
+          setTimeout(() => {
+            window.location.reload();
+          }, 4000);
         }
       } else {
         alert('Failed to upload audio.');
@@ -219,7 +248,7 @@ const Modal = ({ onClose, data }) => {
       console.error('Error submitting the audio file:', error);
     }
   };
-  
+
 
   const updateScore = async () => {
     try {
@@ -293,23 +322,39 @@ const Modal = ({ onClose, data }) => {
   };
   
   return (
-    <div 
+     <div 
       ref={modalRef} 
       onClick={closeModal} 
       className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50"
     >
+      {showConfetti && (
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          <Confetti
+            width={windowDimensions.width}
+            height={windowDimensions.height}
+            recycle={true}
+            numberOfPieces={500}
+            gravity={0.3}
+            initialVelocityY={20}
+            tweenDuration={100}
+            wind={0.05}
+            origin={{ x: 0.5, y: 0 }}
+          />
+        </div>
+      )}
       <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md mx-4">
         <button 
           onClick={onClose} 
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
           aria-label="Close Modal"
         >
+        {/* <Confetti /> */}
           <X size={24} />
         </button>
 
         <div className="p-6 flex flex-col items-center gap-4">
           <img 
-            src={data ? data.letterImage : image1} 
+            src={data.letterImage} 
             alt="Descriptive Alt Text" 
             className="w-32 h-32 object-cover rounded-full"
           />
@@ -329,7 +374,7 @@ const Modal = ({ onClose, data }) => {
 
           <audio 
             ref={audioRef} 
-            src={audio1}
+            // src={audio1}
             onEnded={handleAudioEnded} 
           />
 
