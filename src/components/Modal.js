@@ -229,10 +229,10 @@ const Modal = ({ onClose, data }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from storage
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         mode: 'cors',  
-        body: JSON.stringify({ level: 1 }), // Adjust the level as needed
+        body: JSON.stringify({ level: 1 }), 
       });
   
       if (res.ok) {
@@ -253,10 +253,10 @@ const Modal = ({ onClose, data }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from storage
+          Authorization: `Bearer ${localStorage.getItem('token')}`, 
         },
         mode: 'cors',  
-        body: JSON.stringify({ newX, newY }), // Use actual new coordinates
+        body: JSON.stringify({ newX, newY }), 
       });
   
       if (res.ok) {
@@ -277,10 +277,10 @@ const Modal = ({ onClose, data }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from storage
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         mode: 'cors',  
-        body: JSON.stringify({ treasureIndex }), // Use actual treasure index
+        body: JSON.stringify({ treasureIndex }),
       });
   
       if (res.ok) {
