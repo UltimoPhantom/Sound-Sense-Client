@@ -4,17 +4,21 @@ import Modal from './Modal';
 
 const GameCanvas = ({ playerPosition, treasureArray }) => {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
   const gameControlsRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const container = containerRef.current;
+
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const { width, height } = container.getBoundingClientRect();
+      canvas.width = width;
+      canvas.height = height;
       if (gameControlsRef.current && gameControlsRef.current.resize) {
-        gameControlsRef.current.resize(canvas.width, canvas.height);
+        gameControlsRef.current.resize(width, height);
       }
     };
 
@@ -52,8 +56,8 @@ const GameCanvas = ({ playerPosition, treasureArray }) => {
   };
 
   return (
-    <div className="fixed inset-0 overflow-hidden">
-      <canvas ref={canvasRef} className="w-full h-full"></canvas>
+    <div ref={containerRef} className="fixed inset-0 w-full h-full overflow-hidden">
+      <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full"></canvas>
       {showModal && (
         <Modal 
           onClose={handleCloseModal} 
