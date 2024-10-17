@@ -210,7 +210,7 @@ const Modal = ({ onClose, data }) => {
   
           await updateScore();
           await collectTreasure(data.ttIDX);
-          await updateCoordinates(); 
+          await updateCoordinates(data.x, data.y); 
         }
       } else {
         alert('Failed to upload audio.');
