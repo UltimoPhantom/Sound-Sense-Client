@@ -322,8 +322,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
 
       // Additional vertical moving platform for extra challenge
       new Platform({
-        x: 13880 + 580 + 1500,
-        y: 270,
+        x: 15460 + 700,
+        y: 120,
         image: platformSmallTall1Image,
         isMoving: true,
         movementRange: 400,
@@ -332,7 +332,11 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       }),
 
       // Final landing platform at a higher elevation
-      new Platform({ x: 13880 + 580 + 2000, y: 270, image: platformSmallTall1Image })
+      // new Platform({ x: 13880 + 580 + 2000, y: 200, image: platformSmallTall1Image })
+      new Platform({ x: 13880 + 680 + 2000, y: 200, image: platformImage1 }),
+      new Platform({ x: 13880 + 680 + 2000 + 580, y: 200, image: platformImage1 }),
+      new Platform({ x: 13880 + 680 + 2000 + 580 * 2, y: 200, image: platformImage1 }),
+
     ];
 
     genericObjects = [
