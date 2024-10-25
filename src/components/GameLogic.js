@@ -10,8 +10,6 @@ import spriteStandRight from '../images/spriteStandRight.png';
 import platform1 from '../images/platform1.jpg';
 import createTreasureContent from './treasureContent';
 
-// import audio1 from '../videos/a.mp3';
-
 export function initializeGame(canvas, playerPosition, treasureArray, onTreasureOpen) {
   const c = canvas.getContext('2d');
   canvas.width = window.innerWidth;
@@ -114,12 +112,32 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     }
   }
 
+ 
   class Platform {
-    constructor({ x, y, image }) {
+    constructor({ x, y, image, isMoving = false, movementRange = 200, speed = 2 }) {
       this.position = { x, y };
       this.image = image;
       this.width = image.width;
       this.height = image.height;
+      this.isMoving = isMoving;
+      this.movementRange = movementRange;
+      this.speed = speed;
+      this.startX = x;
+      this.direction = 1; // 1 for right, -1 for left
+    }
+
+    update() {
+      if (this.isMoving) {
+        // Move the platform back and forth
+        this.position.x += this.speed * this.direction;
+        
+        // Check if platform has reached its movement limits
+        if (this.position.x >= this.startX + this.movementRange) {
+          this.direction = -1; // Change direction to left
+        } else if (this.position.x <= this.startX) {
+          this.direction = 1; // Change direction to right
+        }
+      }
     }
 
     draw() {
@@ -244,6 +262,17 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       new Platform({ x: 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
 
       new Platform({ x: 10640 + 580, y: 470, image: platformImage1 }),
+
+      new Platform({ 
+        x: 10640 + 580 + 700, // Position after the last static platform
+        y: 470, 
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 400, // Distance the platform moves
+        speed: 2 // Speed of movement
+      }),
+      new Platform({ x: 10640 + 580 + 1500, y: 470, image: platformImage1 }),
+
       // new Platform({ x: 9360 , y: 470, image: platformImage1 }),
 
       // new Platform({ x: (platformImage1.width + 50) * 9 + 250 + 4000, y: 470, image: platformImage1 }),
@@ -306,7 +335,13 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     genericObjects.forEach((genericObject) => genericObject.draw());
-    platforms.forEach((platform) => platform.draw());
+    
+    // Update and draw platforms
+    platforms.forEach((platform) => {
+      platform.update(); // Update platform position if it's moving
+      platform.draw();
+    });
+    
     treasures.forEach((treasure) => treasure.draw());
     player.update();
 
@@ -320,6 +355,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       player.velocity.x = 0;
     }
 
+    // Modified platform collision detection to account for moving platforms
     platforms.forEach((platform) => {
       if (
         player.position.y + player.height <= platform.position.y &&
@@ -328,6 +364,11 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
         player.position.x <= platform.position.x + platform.width
       ) {
         player.velocity.y = 0;
+        
+        // If platform is moving, move the player with it
+        if (platform.isMoving) {
+          player.position.x += platform.speed * platform.direction;
+        }
       }
     });
 
@@ -337,6 +378,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       init();
     }
   }
+  
 
   init();
   animate();
