@@ -10,6 +10,8 @@ const Modal = ({ onClose, data }) => {
   const [isRepeating, setIsRepeating] = useState(false);
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiOutput, setApiOutput] = useState('');
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   
@@ -203,9 +205,15 @@ const Modal = ({ onClose, data }) => {
 
   const submitAudio = async () => {
     if (!audioURL) {
-      alert('No audio recorded to submit.');
+      setFeedbackMessage('No audio recorded to submit.');
+      setFeedbackType('error');
       return;
     }
+
+    setIsLoading(true);
+    setFeedbackMessage('');
+    setApiOutput('');
+
     console.log("♨️treasure Contents: ♨️", data);
     const formData = new FormData();
     const response = await fetch(audioURL);
