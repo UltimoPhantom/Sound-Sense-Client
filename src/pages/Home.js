@@ -30,7 +30,7 @@ function Home() {
         <span className="navbar-user">Welcome, {loggedInUser}</span>
         <button className="navbar-button" onClick={() => navigate('/child')}>Children</button>
         <button className="navbar-button" onClick={() => navigate('/parents')}>Parents</button>
-        <button className="navbar-button" onClick={() => navigate('/dashboard')}>Dashboard</button>
+        {/* <button className="navbar-button" onClick={() => navigate('/dashboard')}>Dashboard</button> */}
         <button className="navbar-button" onClick={handleLogout}>Logout</button>
       </nav>
       {/* <ToastContainer /> */}

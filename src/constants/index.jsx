@@ -2,14 +2,14 @@
 export const navItems = [
   { label: "Home", href: "#hero" },
   { label: "Features", href: "#features" },
-  { label: "Parent Dashboard", href: "#parent-dashboard" },
+  // { label: "Parent Dashboard", href: "#parent-dashboard" },
   { label: "Contact Us", href: "#contact-us" },
 ];
 
 export const homeNavItems = [
   { label: "Children", href: "/child" },
   { label: "Parents", href: "/parents" },
-  { label: "Dashboard", href: "/dashboard" },
+  // { label: "Dashboard", href: "/dashboard" },
 ];
 export const features = [
   {
