@@ -229,7 +229,9 @@ const Modal = ({ onClose, data }) => {
       if (res.ok) {
         const apiRes = await res.json();
         console.log("♨️RESULT LETTER: ♨️", apiRes.message);
-        if(apiRes.message === data.letter) {
+        setApiOutput(apiRes.message);
+        
+        if(apiRes.message.toLowerCase() === data.letter.toLowerCase()) {
           console.log("♨️♨️", "ITS CORRECT");
   
           await updateScore();
@@ -248,9 +250,13 @@ const Modal = ({ onClose, data }) => {
           setTimeout(() => {
             window.location.reload();
           }, 4000);
+        } else {
+          setFeedbackMessage('Incorrect. Try again!');
+          setFeedbackType('error');
         }
       } else {
-        alert('Failed to upload audio.');
+        setFeedbackMessage('Failed to upload audio. Please try again.');
+        setFeedbackType('error');
       }
     } catch (error) {
       console.error('Error submitting the audio file:', error);
