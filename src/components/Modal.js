@@ -260,6 +260,10 @@ const Modal = ({ onClose, data }) => {
       }
     } catch (error) {
       console.error('Error submitting the audio file:', error);
+      setFeedbackMessage('Error submitting audio. Please try again.');
+      setFeedbackType('error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -336,35 +340,45 @@ const Modal = ({ onClose, data }) => {
   };
   
   return (
-     <div 
-      ref={modalRef} 
-      onClick={closeModal} 
-      className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50"
-    >
-      {showConfetti && (
-        <div className="fixed inset-0 z-50 pointer-events-none">
-          <Confetti
-            width={windowDimensions.width}
-            height={windowDimensions.height}
-            recycle={true}
-            numberOfPieces={500}
-            gravity={0.3}
-            initialVelocityY={20}
-            tweenDuration={100}
-            wind={0.05}
-            origin={{ x: 0.5, y: 0 }}
-          />
-        </div>
-      )}
-      <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md mx-4">
-        <button 
-          onClick={onClose} 
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-          aria-label="Close Modal"
-        >
-        {/* <Confetti /> */}
-          <X size={24} />
-        </button>
+    <div 
+     ref={modalRef} 
+     onClick={closeModal} 
+     className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50"
+   >
+     {showConfetti && (
+       <div className="fixed inset-0 z-50 pointer-events-none">
+         <Confetti
+           width={windowDimensions.width}
+           height={windowDimensions.height}
+           recycle={true}
+           numberOfPieces={500}
+           gravity={0.3}
+           initialVelocityY={20}
+           tweenDuration={100}
+           wind={0.05}
+           origin={{ x: 0.5, y: 0 }}
+         />
+       </div>
+     )}
+     
+     {/* Loading Overlay */}
+     {isLoading && (
+       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+         <div className="bg-white p-6 rounded-lg flex flex-col items-center gap-3">
+           <Loader className="w-8 h-8 animate-spin text-blue-500" />
+           <p className="text-gray-700">Processing your recording...</p>
+         </div>
+       </div>
+     )}
+
+     <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md mx-4">
+       <button 
+         onClick={onClose} 
+         className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+         aria-label="Close Modal"
+       >
+         <X size={24} />
+       </button>
 
         <div className="p-6 flex flex-col items-center gap-4">
           <img 
