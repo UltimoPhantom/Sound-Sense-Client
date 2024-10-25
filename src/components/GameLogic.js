@@ -264,16 +264,26 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       new Platform({ x: 10640 + 580, y: 470, image: platformImage1 }),
 
       new Platform({ 
-        x: 10640 + 580 + 700, // Position after the last static platform
+        x: 10640 + 580 + 700, 
         y: 470, 
         image: platformImage1,
         isMoving: true,
-        movementRange: 400, // Distance the platform moves
-        speed: 2 // Speed of movement
+        movementRange: 800,
+        speed: 2 
       }),
-      new Platform({ x: 10640 + 580 + 1500, y: 470, image: platformImage1 }),
+      
+      new Platform({ x: 12720 + 580, y: 470, image: platformImage1 }),
+      
+      new Platform({ 
+        x: 13880, 
+        y: 470, 
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 1000,
+        speed: 6 
+      }),
 
-      // new Platform({ x: 9360 , y: 470, image: platformImage1 }),
+      new Platform({ x: 13880 + 580 + 1000 , y: 470, image: platformImage1 }),
 
       // new Platform({ x: (platformImage1.width + 50) * 9 + 250 + 4000, y: 470, image: platformImage1 }),
 
@@ -378,7 +388,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       init();
     }
   }
-  
+
 
   init();
   animate();
