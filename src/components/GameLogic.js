@@ -112,9 +112,17 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     }
   }
 
- 
+
   class Platform {
-    constructor({ x, y, image, isMoving = false, movementRange = 200, speed = 2 }) {
+    constructor({
+      x,
+      y,
+      image,
+      isMoving = false,
+      movementRange = 200,
+      speed = 2,
+      movementType = 'horizontal' // 'horizontal' or 'vertical'
+    }) {
       this.position = { x, y };
       this.image = image;
       this.width = image.width;
@@ -123,19 +131,31 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       this.movementRange = movementRange;
       this.speed = speed;
       this.startX = x;
-      this.direction = 1; // 1 for right, -1 for left
+      this.startY = y;
+      this.direction = 1; // 1 for right/down, -1 for left/up
+      this.movementType = movementType;
     }
 
     update() {
       if (this.isMoving) {
-        // Move the platform back and forth
-        this.position.x += this.speed * this.direction;
-        
-        // Check if platform has reached its movement limits
-        if (this.position.x >= this.startX + this.movementRange) {
-          this.direction = -1; // Change direction to left
-        } else if (this.position.x <= this.startX) {
-          this.direction = 1; // Change direction to right
+        if (this.movementType === 'horizontal') {
+          // Horizontal movement
+          this.position.x += this.speed * this.direction;
+
+          if (this.position.x >= this.startX + this.movementRange) {
+            this.direction = -1;
+          } else if (this.position.x <= this.startX) {
+            this.direction = 1;
+          }
+        } else if (this.movementType === 'vertical') {
+          // Vertical movement
+          this.position.y += this.speed * this.direction;
+
+          if (this.position.y >= this.startY + this.movementRange) {
+            this.direction = -1;
+          } else if (this.position.y <= this.startY) {
+            this.direction = 1;
+          }
         }
       }
     }
@@ -196,9 +216,9 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       if (!this.isOpen) {
         this.isOpen = true;
         console.log(`Treasure ${this.tIDX} opened`);
-        
+
         if (onTreasureOpen) {
-          onTreasureOpen(this); 
+          onTreasureOpen(this);
         }
       }
     }
@@ -217,7 +237,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       letterImage: content.letterImage,
       letter: content.letter
     }));
-  
+
     console.log("Treasures initialized:", treasures.map(t => ({ tIDX: t.tIDX, isOpen: t.isOpen })));
   }
 
@@ -239,7 +259,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
 
     platforms = [
       new Platform({ x: -1, y: 470, image: platformImage }),
-      new Platform({ x: platformImage.width , y: 470, image: platformImage }),
+      new Platform({ x: platformImage.width, y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 3 + 300, y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 4 + 300, y: 270, image: platformSmallTallImage }),
@@ -250,49 +270,69 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       new Platform({ x: (platformImage1.width + 50) * 8 + 300, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 9 + 250, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 10 + 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 11 + 250, y: 470, image: platformImage1 }),
 
       new Platform({ x: (platformImage1.width + 50) * 11 + 400, y: 290, image: platformSmallTall1Image }),
       new Platform({ x: (platformImage1.width + 50) * 11 + 900, y: 290, image: platformSmallTall1Image }),
-      new Platform({ x: (platformImage1.width + 50) * 11 + 900+500, y: 290, image: platformSmallTall1Image }),
-      new Platform({ x: (platformImage1.width + 50) * 11 + 900+500+500, y: 290, image: platformSmallTall1Image }),
-      
+      new Platform({ x: (platformImage1.width + 50) * 11 + 900 + 500, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: (platformImage1.width + 50) * 11 + 900 + 500 + 500, y: 290, image: platformSmallTall1Image }),
+
       new Platform({ x: (platformImage1.width + 50) * 8 + 300 + 4000, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
 
       new Platform({ x: 10640 + 580, y: 470, image: platformImage1 }),
 
-      new Platform({ 
-        x: 10640 + 580 + 700, 
-        y: 470, 
+      // First horizontal moving platform
+      new Platform({
+        x: 10640 + 580 + 700,
+        y: 470,
         image: platformImage1,
         isMoving: true,
         movementRange: 800,
-        speed: 2 
+        speed: 2,
+        movementType: 'horizontal'
       }),
-      
+
       new Platform({ x: 12720 + 580, y: 470, image: platformImage1 }),
-      
-      new Platform({ 
-        x: 13880, 
-        y: 470, 
+
+      // Vertical moving platform
+      // new Platform({
+      //   x: 13300,
+      //   y: 470,
+      //   image: platformImage1,
+      //   isMoving: true,
+      //   movementRange: 300,
+      //   speed: 1.5,
+      //   movementType: 'vertical'
+      // }),
+
+      // Second horizontal moving platform (faster)
+      new Platform({
+        x: 13880,
+        y: 470,
         image: platformImage1,
         isMoving: true,
         movementRange: 1000,
-        speed: 6 
+        speed: 5,
+        movementType: 'horizontal'
       }),
 
-      new Platform({ x: 13880 + 580 + 1000 , y: 470, image: platformImage1 }),
+      // Final platform
+      new Platform({ x: 13880 + 580 + 1000, y: 470, image: platformImage1 }),
 
-      // new Platform({ x: (platformImage1.width + 50) * 9 + 250 + 4000, y: 470, image: platformImage1 }),
+      // Additional vertical moving platform for extra challenge
+      new Platform({
+        x: 13880 + 580 + 1500,
+        y: 270,
+        image: platformSmallTall1Image,
+        isMoving: true,
+        movementRange: 400,
+        speed: 2,
+        movementType: 'vertical'
+      }),
 
-      // new Platform({ x: (platformImage1.width + 50) * 10 + 300 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 11 + 250 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 12 + 200 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 13 + 150 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 14 + 100 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 15 + 50 + 4000, y: 470, image: platformImage1 }),
+      // Final landing platform at a higher elevation
+      new Platform({ x: 13880 + 580 + 2000, y: 270, image: platformSmallTall1Image })
     ];
 
     genericObjects = [
@@ -315,7 +355,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     }
 
     function checkTreasureCollisions() {
-      const playerRange = 100; 
+      const playerRange = 100;
 
       validTreasureIndex.forEach(({ tIDX, position }) => {
         const treasure = treasures[tIDX];
@@ -345,13 +385,12 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     genericObjects.forEach((genericObject) => genericObject.draw());
-    
-    // Update and draw platforms
+
     platforms.forEach((platform) => {
-      platform.update(); // Update platform position if it's moving
+      platform.update();
       platform.draw();
     });
-    
+
     treasures.forEach((treasure) => treasure.draw());
     player.update();
 
@@ -365,7 +404,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       player.velocity.x = 0;
     }
 
-    // Modified platform collision detection to account for moving platforms
+    // Enhanced platform collision detection
     platforms.forEach((platform) => {
       if (
         player.position.y + player.height <= platform.position.y &&
@@ -374,10 +413,14 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
         player.position.x <= platform.position.x + platform.width
       ) {
         player.velocity.y = 0;
-        
+
         // If platform is moving, move the player with it
         if (platform.isMoving) {
-          player.position.x += platform.speed * platform.direction;
+          if (platform.movementType === 'horizontal') {
+            player.position.x += platform.speed * platform.direction;
+          } else if (platform.movementType === 'vertical') {
+            player.position.y += platform.speed * platform.direction;
+          }
         }
       }
     });
@@ -388,7 +431,6 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       init();
     }
   }
-
 
   init();
   animate();
