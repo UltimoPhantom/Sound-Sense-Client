@@ -242,8 +242,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       new Platform({ x: (platformImage1.width + 50) * 8 + 300 + 4000, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
-      
-      // new Platform({ x: 9360 + 100, y: 470, image: platformImage1 }),
+
+      new Platform({ x: 10640 + 580, y: 470, image: platformImage1 }),
       // new Platform({ x: 9360 , y: 470, image: platformImage1 }),
 
       // new Platform({ x: (platformImage1.width + 50) * 9 + 250 + 4000, y: 470, image: platformImage1 }),

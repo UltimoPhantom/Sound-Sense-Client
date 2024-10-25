@@ -9,8 +9,8 @@ const GameCanvas = ({ playerPosition, treasureArray }) => {
   const [modalData, setModalData] = useState(null);
   const gameControlsRef = useRef(null);
 
-  playerPosition.curr_x = 11040
-  playerPosition.curr_y = 319.00
+  // playerPosition.curr_x = 11040
+  // playerPosition.curr_y = 319.00 
 
   useEffect(() => {
     const canvas = canvasRef.current;
