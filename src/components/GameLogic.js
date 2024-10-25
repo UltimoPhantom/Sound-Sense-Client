@@ -3,11 +3,13 @@ import hills from '../images/hills.png';
 import background from '../images/background.png';
 import platformSmallTall from '../images/platformSmallTall.png';
 import platformSmallTall1 from '../images/platformSmallTall1.png'
+import platformSmallTall2 from '../images/platformSmallTall2.jpg'
 import spriteRunLeft from '../images/spriteRunLeft.png';
 import spriteRunRight from '../images/spriteRunRight.png';
 import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
 import platform1 from '../images/platform1.jpg';
+import platform2 from '../images/platform2.jpg'
 import createTreasureContent from './treasureContent';
 
 export function initializeGame(canvas, playerPosition, treasureArray, onTreasureOpen) {
@@ -270,19 +272,15 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       new Platform({ x: (platformImage1.width + 50) * 8 + 300, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 9 + 250, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 10 + 300, y: 470, image: platformImage1 }),
-
       new Platform({ x: (platformImage1.width + 50) * 11 + 400, y: 290, image: platformSmallTall1Image }),
       new Platform({ x: (platformImage1.width + 50) * 11 + 900, y: 290, image: platformSmallTall1Image }),
       new Platform({ x: (platformImage1.width + 50) * 11 + 900 + 500, y: 290, image: platformSmallTall1Image }),
       new Platform({ x: (platformImage1.width + 50) * 11 + 900 + 500 + 500, y: 290, image: platformSmallTall1Image }),
-
       new Platform({ x: (platformImage1.width + 50) * 8 + 300 + 4000, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
-
       new Platform({ x: 10640 + 580, y: 470, image: platformImage1 }),
 
-      // First horizontal moving platform
       new Platform({
         x: 10640 + 580 + 700,
         y: 470,
@@ -295,18 +293,6 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
 
       new Platform({ x: 12720 + 580, y: 470, image: platformImage1 }),
 
-      // Vertical moving platform
-      // new Platform({
-      //   x: 13300,
-      //   y: 470,
-      //   image: platformImage1,
-      //   isMoving: true,
-      //   movementRange: 300,
-      //   speed: 1.5,
-      //   movementType: 'vertical'
-      // }),
-
-      // Second horizontal moving platform (faster)
       new Platform({
         x: 13880,
         y: 470,
@@ -317,10 +303,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
         movementType: 'horizontal'
       }),
 
-      // Final platform
       new Platform({ x: 13880 + 580 + 1000, y: 470, image: platformImage1 }),
 
-      // Additional vertical moving platform for extra challenge
       new Platform({
         x: 15460 + 700,
         y: 120,
@@ -331,20 +315,82 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
         movementType: 'vertical'
       }),
 
-      // Final landing platform at a higher elevation
-      // new Platform({ x: 13880 + 580 + 2000, y: 200, image: platformSmallTall1Image })
       new Platform({ x: 13880 + 680 + 2000, y: 200, image: platformImage1 }),
       new Platform({ x: 13880 + 680 + 2000 + 580, y: 200, image: platformImage1 }),
       new Platform({ x: 13880 + 680 + 2000 + 580 * 2, y: 200, image: platformImage1 }),
+
+      // -------------> *|LEVEL 2|* <-----------------------
+
+      new Platform({ x: 18820, y: 470, image: platformImage }),
+      new Platform({ x: 18820 + platformImage.width, y: 470, image: platformImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 3 + 300, y: 470, image: platformImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 4 + 300, y: 270, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 5 + 100, y: 170, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 6 - 50, y: 70 + 90, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 6 + 400, y: 170, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 7 + 300, y: 170, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 8 + 300, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 9 + 250, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 10 + 300, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 400, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 900, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 900 + 500, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 900 + 500 + 500, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 8 + 300 + 4000, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + 9360 + 200 + 500, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + 10640 + 580, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 10640 + 580 + 700 + 18820,
+        y: 470,
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 800,
+        speed: 2,
+        movementType: 'horizontal'
+      }),
+
+      new Platform({ x: 12720 + 580 + 18820, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 13880 + 18820,
+        y: 470,
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 1000,
+        speed: 5,
+        movementType: 'horizontal'
+      }),
+
+      new Platform({ x: 18820 + 13880 + 580 + 1000, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 15460 + 700 + 18820,
+        y: 120,
+        image: platformSmallTall1Image,
+        isMoving: true,
+        movementRange: 400,
+        speed: 2,
+        movementType: 'vertical'
+      }),
+
+      new Platform({ x: 18820 + 13880 + 680 + 2000, y: 200, image: platformImage1 }),
+      new Platform({ x: 18820 + 13880 + 680 + 2000 + 580, y: 200, image: platformImage1 }),
+      new Platform({ x: 18820 + 13880 + 680 + 2000 + 580 * 2, y: 200, image: platformImage1 }),
+
+
 
     ];
 
     genericObjects = [
       new GenericObject({ x: -1, y: -1, image: backgroundImage }),
       new GenericObject({ x: 11540, y: -1, image: backgroundImage }),
+      new GenericObject({ x: 23130, y: -1, image: backgroundImage }),
       new GenericObject({ x: 8000, y: -1, image: hillsImage }),
+      new GenericObject({ x: 23130, y: -1, image: hillsImage }),
     ];
-
     initTreasures();
 
     keys = {
