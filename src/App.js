@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import LandingPage from './pages/landing'
 import { ToastContainer } from 'react-toastify';
 import Modal from './components/Modal';
+import ParentDashboard from './pages/ParentDashboard';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -112,6 +113,11 @@ function App() {
             path='/child'
             element={isAuthenticated ? <GameCanvas playerPosition={playerPosition} treasureArray={treasureArray} /> : <Navigate to="/login" />}
           />
+
+          <Route
+              path='/parents'
+              element={isAuthenticated ? <ParentDashboard /> : <Navigate to="/login" />}
+            />
         </Routes>
         <ToastContainer />
       </div>
