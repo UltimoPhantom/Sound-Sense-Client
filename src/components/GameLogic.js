@@ -3,14 +3,14 @@ import hills from '../images/hills.png';
 import background from '../images/background.png';
 import platformSmallTall from '../images/platformSmallTall.png';
 import platformSmallTall1 from '../images/platformSmallTall1.png'
+import platformSmallTall2 from '../images/platformSmallTall2.jpg'
 import spriteRunLeft from '../images/spriteRunLeft.png';
 import spriteRunRight from '../images/spriteRunRight.png';
 import spriteStandLeft from '../images/spriteStandLeft.png';
 import spriteStandRight from '../images/spriteStandRight.png';
 import platform1 from '../images/platform1.jpg';
+import platform2 from '../images/platform2.jpg'
 import createTreasureContent from './treasureContent';
-
-// import audio1 from '../videos/a.mp3';
 
 export function initializeGame(canvas, playerPosition, treasureArray, onTreasureOpen) {
   const c = canvas.getContext('2d');
@@ -114,12 +114,52 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     }
   }
 
+
   class Platform {
-    constructor({ x, y, image }) {
+    constructor({
+      x,
+      y,
+      image,
+      isMoving = false,
+      movementRange = 200,
+      speed = 2,
+      movementType = 'horizontal' // 'horizontal' or 'vertical'
+    }) {
       this.position = { x, y };
       this.image = image;
       this.width = image.width;
       this.height = image.height;
+      this.isMoving = isMoving;
+      this.movementRange = movementRange;
+      this.speed = speed;
+      this.startX = x;
+      this.startY = y;
+      this.direction = 1; // 1 for right/down, -1 for left/up
+      this.movementType = movementType;
+    }
+
+    update() {
+      if (this.isMoving) {
+        if (this.movementType === 'horizontal') {
+          // Horizontal movement
+          this.position.x += this.speed * this.direction;
+
+          if (this.position.x >= this.startX + this.movementRange) {
+            this.direction = -1;
+          } else if (this.position.x <= this.startX) {
+            this.direction = 1;
+          }
+        } else if (this.movementType === 'vertical') {
+          // Vertical movement
+          this.position.y += this.speed * this.direction;
+
+          if (this.position.y >= this.startY + this.movementRange) {
+            this.direction = -1;
+          } else if (this.position.y <= this.startY) {
+            this.direction = 1;
+          }
+        }
+      }
     }
 
     draw() {
@@ -178,9 +218,9 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       if (!this.isOpen) {
         this.isOpen = true;
         console.log(`Treasure ${this.tIDX} opened`);
-        
+
         if (onTreasureOpen) {
-          onTreasureOpen(this); 
+          onTreasureOpen(this);
         }
       }
     }
@@ -199,7 +239,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       letterImage: content.letterImage,
       letter: content.letter
     }));
-  
+
     console.log("Treasures initialized:", treasures.map(t => ({ tIDX: t.tIDX, isOpen: t.isOpen })));
   }
 
@@ -214,14 +254,16 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     player = new Player();
     const platformImage = createImage(platform);
     const platformImage1 = createImage(platform1);
+    const platformImage2 = createImage(platform2);
     const backgroundImage = createImage(background);
     const hillsImage = createImage(hills);
     const platformSmallTallImage = createImage(platformSmallTall);
     const platformSmallTall1Image = createImage(platformSmallTall1);
+    const platformSmallTall2Image = createImage(platformSmallTall2);
 
     platforms = [
       new Platform({ x: -1, y: 470, image: platformImage }),
-      new Platform({ x: platformImage.width , y: 470, image: platformImage }),
+      new Platform({ x: platformImage.width, y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 3 + 300, y: 470, image: platformImage }),
       new Platform({ x: (platformImage.width + 50) * 4 + 300, y: 270, image: platformSmallTallImage }),
@@ -232,36 +274,125 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       new Platform({ x: (platformImage1.width + 50) * 8 + 300, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 9 + 250, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 10 + 300, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 11 + 250, y: 470, image: platformImage1 }),
-
       new Platform({ x: (platformImage1.width + 50) * 11 + 400, y: 290, image: platformSmallTall1Image }),
       new Platform({ x: (platformImage1.width + 50) * 11 + 900, y: 290, image: platformSmallTall1Image }),
-      new Platform({ x: (platformImage1.width + 50) * 11 + 900+500, y: 290, image: platformSmallTall1Image }),
-      new Platform({ x: (platformImage1.width + 50) * 11 + 900+500+500, y: 290, image: platformSmallTall1Image }),
-      
+      new Platform({ x: (platformImage1.width + 50) * 11 + 900 + 500, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: (platformImage1.width + 50) * 11 + 900 + 500 + 500, y: 290, image: platformSmallTall1Image }),
       new Platform({ x: (platformImage1.width + 50) * 8 + 300 + 4000, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500, y: 470, image: platformImage1 }),
       new Platform({ x: 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
-
       new Platform({ x: 10640 + 580, y: 470, image: platformImage1 }),
-      // new Platform({ x: 9360 , y: 470, image: platformImage1 }),
 
-      // new Platform({ x: (platformImage1.width + 50) * 9 + 250 + 4000, y: 470, image: platformImage1 }),
+      new Platform({
+        x: 10640 + 580 + 700,
+        y: 470,
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 800,
+        speed: 2,
+        movementType: 'horizontal'
+      }),
 
-      // new Platform({ x: (platformImage1.width + 50) * 10 + 300 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 11 + 250 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 12 + 200 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 13 + 150 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 14 + 100 + 4000, y: 470, image: platformImage1 }),
-      // new Platform({ x: (platformImage1.width + 50) * 15 + 50 + 4000, y: 470, image: platformImage1 }),
+      new Platform({ x: 12720 + 580, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 13880,
+        y: 470,
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 1000,
+        speed: 5,
+        movementType: 'horizontal'
+      }),
+
+      new Platform({ x: 13880 + 580 + 1000, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 15460 + 700,
+        y: 120,
+        image: platformSmallTall1Image,
+        isMoving: true,
+        movementRange: 400,
+        speed: 2,
+        movementType: 'vertical'
+      }),
+
+      new Platform({ x: 13880 + 680 + 2000, y: 200, image: platformImage1 }),
+      new Platform({ x: 13880 + 680 + 2000 + 580, y: 200, image: platformImage1 }),
+      new Platform({ x: 13880 + 680 + 2000 + 580 * 2, y: 200, image: platformImage1 }),
+
+      // -------------> *|LEVEL 2|* <-----------------------
+
+      new Platform({ x: 18820, y: 470, image: platformImage2 }),
+      new Platform({ x: 18820 + platformImage.width, y: 470, image: platformImage2 }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 3 + 300, y: 470, image: platformImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 4 + 300, y: 270, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 5 + 100, y: 170, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 6 - 50, y: 70 + 90, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 6 + 400, y: 170, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage.width + 50) * 7 + 300, y: 170, image: platformSmallTallImage }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 8 + 300, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 9 + 250, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 10 + 300, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 400, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 900, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 900 + 500, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 11 + 900 + 500 + 500, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: 18820 + (platformImage1.width + 50) * 8 + 300 + 4000, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + 9360 + 200 + 500, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
+      new Platform({ x: 18820 + 10640 + 580, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 10640 + 580 + 700 + 18820,
+        y: 470,
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 800,
+        speed: 2,
+        movementType: 'horizontal'
+      }),
+
+      new Platform({ x: 12720 + 580 + 18820, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 13880 + 18820,
+        y: 470,
+        image: platformImage1,
+        isMoving: true,
+        movementRange: 1000,
+        speed: 5,
+        movementType: 'horizontal'
+      }),
+
+      new Platform({ x: 18820 + 13880 + 580 + 1000, y: 470, image: platformImage1 }),
+
+      new Platform({
+        x: 15460 + 700 + 18820,
+        y: 120,
+        image: platformSmallTall1Image,
+        isMoving: true,
+        movementRange: 400,
+        speed: 2,
+        movementType: 'vertical'
+      }),
+
+      new Platform({ x: 18820 + 13880 + 680 + 2000, y: 200, image: platformImage1 }),
+      new Platform({ x: 18820 + 13880 + 680 + 2000 + 580, y: 200, image: platformImage1 }),
+      new Platform({ x: 18820 + 13880 + 680 + 2000 + 580 * 2, y: 200, image: platformImage1 }),
+
+
+
     ];
 
     genericObjects = [
       new GenericObject({ x: -1, y: -1, image: backgroundImage }),
       new GenericObject({ x: 11540, y: -1, image: backgroundImage }),
+      new GenericObject({ x: 23130, y: -1, image: backgroundImage }),
       new GenericObject({ x: 8000, y: -1, image: hillsImage }),
+      new GenericObject({ x: 23130, y: -1, image: hillsImage }),
     ];
-
     initTreasures();
 
     keys = {
@@ -276,7 +407,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     }
 
     function checkTreasureCollisions() {
-      const playerRange = 100; 
+      const playerRange = 100;
 
       validTreasureIndex.forEach(({ tIDX, position }) => {
         const treasure = treasures[tIDX];
@@ -306,7 +437,12 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     genericObjects.forEach((genericObject) => genericObject.draw());
-    platforms.forEach((platform) => platform.draw());
+
+    platforms.forEach((platform) => {
+      platform.update();
+      platform.draw();
+    });
+
     treasures.forEach((treasure) => treasure.draw());
     player.update();
 
@@ -320,6 +456,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       player.velocity.x = 0;
     }
 
+    // Enhanced platform collision detection
     platforms.forEach((platform) => {
       if (
         player.position.y + player.height <= platform.position.y &&
@@ -328,6 +465,15 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
         player.position.x <= platform.position.x + platform.width
       ) {
         player.velocity.y = 0;
+
+        // If platform is moving, move the player with it
+        if (platform.isMoving) {
+          if (platform.movementType === 'horizontal') {
+            player.position.x += platform.speed * platform.direction;
+          } else if (platform.movementType === 'vertical') {
+            player.position.y += platform.speed * platform.direction;
+          }
+        }
       }
     });
 
