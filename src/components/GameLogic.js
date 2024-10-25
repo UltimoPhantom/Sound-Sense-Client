@@ -254,10 +254,12 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     player = new Player();
     const platformImage = createImage(platform);
     const platformImage1 = createImage(platform1);
+    const platformImage2 = createImage(platform2);
     const backgroundImage = createImage(background);
     const hillsImage = createImage(hills);
     const platformSmallTallImage = createImage(platformSmallTall);
     const platformSmallTall1Image = createImage(platformSmallTall1);
+    const platformSmallTall2Image = createImage(platformSmallTall2);
 
     platforms = [
       new Platform({ x: -1, y: 470, image: platformImage }),
@@ -321,8 +323,8 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
 
       // -------------> *|LEVEL 2|* <-----------------------
 
-      new Platform({ x: 18820, y: 470, image: platformImage }),
-      new Platform({ x: 18820 + platformImage.width, y: 470, image: platformImage }),
+      new Platform({ x: 18820, y: 470, image: platformImage2 }),
+      new Platform({ x: 18820 + platformImage.width, y: 470, image: platformImage2 }),
       new Platform({ x: 18820 + (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
       new Platform({ x: 18820 + (platformImage.width + 50) * 3 + 300, y: 470, image: platformImage }),
       new Platform({ x: 18820 + (platformImage.width + 50) * 4 + 300, y: 270, image: platformSmallTallImage }),

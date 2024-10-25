@@ -15,66 +15,126 @@ const createTreasureContent = () => [
   //     letter: 'ಆ'
   //     // audio: audio1,
   //   },
-  // { //1
-  //   x: 2870,
-  //   y: 90,
-  //   imageClosed: box_close_png,
-  //   imageOpen: box_open_png,
-  //   taskDescription: "Pronounce the above word!",
-  //   letterImage: image1,
-  //   letter: "ಆ",
-  //   // audio: audio1,
-  // },
-  // { //2
-  //   x: 5970,
-  //   y: 290,
-  //   imageClosed: box_close_png,
-  //   imageOpen: box_open_png,
-  //   taskDescription: "Repeat the phrase 'I can speak!'",
-  //   letterImage: image3,
-  //   letter: 'ಹಾ'
-  //   // audio: audio1,
-  // },
-  // { //3
-  //   x: 7870,
-  //   y: 139-30,
-  //   imageClosed: box_close_png,
-  //   imageOpen: box_open_png,
-  //   taskDescription: "Repeat the phrase 'I can speak!'",
-  //   letterImage: image3,
-  //   letter: 'ಹಾ'
-  //   // audio: audio1,
-  // },
-  // { //4
-  //   x: 10410,
-  //   y: 319 - 30,
-  //   imageClosed: box_close_png,
-  //   imageOpen: box_open_png,
-  //   taskDescription: "Repeat the phrase 'I can speak!'",
-  //   letterImage: image3,
-  //   letter: 'ಹಾ'
-  //   // audio: audio1,
-  // },
-  // { //5
-  //   x: 13772 - 200,
-  //   y: 319 - 30,
-  //   imageClosed: box_close_png,
-  //   imageOpen: box_open_png,
-  //   taskDescription: "Repeat the phrase 'I can speak!'",
-  //   letterImage: image3,
-  //   letter: 'ಹಾ'
-  //   // audio: audio1,
-  // },
-  // { //6
-  //   x: 18037,
-  //   y: 49 - 30,
-  //   imageClosed: box_close_png,
-  //   imageOpen: box_open_png,
-  //   taskDescription: "Repeat the phrase 'I can speak!'",
-  //   letterImage: image3,
-  //   letter: 'ಹಾ'
-  //   // audio: audio1,
-  // },
+    { //1
+      x: 2870,
+      y: 90,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Pronounce the above word!",
+      letterImage: image1,
+      letter: "ಆ",
+      // audio: audio1,
+    },
+    { //2
+      x: 5970,
+      y: 290,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //3
+      x: 7870,
+      y: 139-30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //4
+      x: 10410,
+      y: 319 - 30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //5
+      x: 13772 - 200,
+      y: 319 - 30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //6
+      x: 18037,
+      y: 49 - 30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //1
+      x: 18820 + 2870,
+      y: 90,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Pronounce the above word!",
+      letterImage: image1,
+      letter: "ಆ",
+      // audio: audio1,
+    },
+    { //2
+      x: 18820 + 5970,
+      y: 290,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //3
+      x: 18820 + 7870,
+      y: 139-30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //4
+      x: 18820 + 10410,
+      y: 319 - 30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //5
+      x: 18820 + 13772 - 200,
+      y: 319 - 30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
+    { //6
+      x: 18820 + 18037,
+      y: 49 - 30,
+      imageClosed: box_close_png,
+      imageOpen: box_open_png,
+      taskDescription: "Repeat the phrase 'I can speak!'",
+      letterImage: image3,
+      letter: 'ಹಾ'
+      // audio: audio1,
+    },
 ];
 
 export default createTreasureContent;
