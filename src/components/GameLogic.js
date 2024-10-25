@@ -2,6 +2,7 @@ import platform from '../images/platform.png';
 import hills from '../images/hills.png';
 import background from '../images/background.png';
 import platformSmallTall from '../images/platformSmallTall.png';
+import platformSmallTall1 from '../images/platformSmallTall1.png'
 import spriteRunLeft from '../images/spriteRunLeft.png';
 import spriteRunRight from '../images/spriteRunRight.png';
 import spriteStandLeft from '../images/spriteStandLeft.png';
@@ -216,6 +217,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     const backgroundImage = createImage(background);
     const hillsImage = createImage(hills);
     const platformSmallTallImage = createImage(platformSmallTall);
+    const platformSmallTall1Image = createImage(platformSmallTall1);
 
     platforms = [
       new Platform({ x: -1, y: 470, image: platformImage }),
@@ -230,19 +232,34 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       new Platform({ x: (platformImage1.width + 50) * 8 + 300, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 9 + 250, y: 470, image: platformImage1 }),
       new Platform({ x: (platformImage1.width + 50) * 10 + 300, y: 470, image: platformImage1 }),
-      new Platform({ x: (platformImage1.width + 50) * 11 + 250, y: 470, image: platformImage1 }),
-      new Platform({ x: (platformImage1.width + 50) * 12 + 200, y: 470, image: platformImage1 }),
-      new Platform({ x: (platformImage1.width + 50) * 13 + 150, y: 470, image: platformImage1 }),
-      new Platform({ x: (platformImage1.width + 50) * 14 + 100, y: 470, image: platformImage1 }),
+      // new Platform({ x: (platformImage1.width + 50) * 11 + 250, y: 470, image: platformImage1 }),
 
-      new Platform({ x: (platformImage1.width + 50) * 15 + 50, y: 470, image: platformImage1 }),
-    
+      new Platform({ x: (platformImage1.width + 50) * 11 + 400, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: (platformImage1.width + 50) * 11 + 900, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: (platformImage1.width + 50) * 11 + 900+500, y: 290, image: platformSmallTall1Image }),
+      new Platform({ x: (platformImage1.width + 50) * 11 + 900+500+500, y: 290, image: platformSmallTall1Image }),
+      
+      new Platform({ x: (platformImage1.width + 50) * 8 + 300 + 4000, y: 470, image: platformImage1 }),
+      new Platform({ x: 9360 + 200 + 500, y: 470, image: platformImage1 }),
+      new Platform({ x: 9360 + 200 + 500 + 580, y: 470, image: platformImage1 }),
+      
+      // new Platform({ x: 9360 + 100, y: 470, image: platformImage1 }),
+      // new Platform({ x: 9360 , y: 470, image: platformImage1 }),
+
+      // new Platform({ x: (platformImage1.width + 50) * 9 + 250 + 4000, y: 470, image: platformImage1 }),
+
+      // new Platform({ x: (platformImage1.width + 50) * 10 + 300 + 4000, y: 470, image: platformImage1 }),
+      // new Platform({ x: (platformImage1.width + 50) * 11 + 250 + 4000, y: 470, image: platformImage1 }),
+      // new Platform({ x: (platformImage1.width + 50) * 12 + 200 + 4000, y: 470, image: platformImage1 }),
+      // new Platform({ x: (platformImage1.width + 50) * 13 + 150 + 4000, y: 470, image: platformImage1 }),
+      // new Platform({ x: (platformImage1.width + 50) * 14 + 100 + 4000, y: 470, image: platformImage1 }),
+      // new Platform({ x: (platformImage1.width + 50) * 15 + 50 + 4000, y: 470, image: platformImage1 }),
     ];
 
     genericObjects = [
       new GenericObject({ x: -1, y: -1, image: backgroundImage }),
       new GenericObject({ x: 11540, y: -1, image: backgroundImage }),
-      new GenericObject({ x: -1, y: -1, image: hillsImage }),
+      new GenericObject({ x: 8000, y: -1, image: hillsImage }),
     ];
 
     initTreasures();
