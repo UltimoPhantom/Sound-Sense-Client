@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat } from "lucide-react";
+import { X, Volume2, Mic, Play, Pause, RotateCw, Repeat, Loader } from "lucide-react";
 import Confetti from 'react-confetti';
 
 const Modal = ({ onClose, data }) => {
@@ -16,6 +16,8 @@ const Modal = ({ onClose, data }) => {
   const audioChunksRef = useRef([]);
   
   const [showConfetti, setShowConfetti] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [feedbackType, setFeedbackType] = useState('');
   const [windowDimensions, setWindowDimensions] = useState({ 
     width: window.innerWidth,
     height: window.innerHeight
@@ -203,7 +205,7 @@ const Modal = ({ onClose, data }) => {
     return new Blob([buffer], { type: "audio/wav" });
   };
 
-  const submitAudio = async () => {
+   const submitAudio = async () => {
     if (!audioURL) {
       setFeedbackMessage('No audio recorded to submit.');
       setFeedbackType('error');
@@ -233,20 +235,19 @@ const Modal = ({ onClose, data }) => {
         
         if(apiRes.message.toLowerCase() === data.letter.toLowerCase()) {
           console.log("♨️♨️", "ITS CORRECT");
+          setFeedbackMessage('Correct! Well done!');
+          setFeedbackType('success');
   
           await updateScore();
           await collectTreasure(data.ttIDX);
           await updateCoordinates(data.x, data.y);
           
-          // Show confetti
           setShowConfetti(true);
           
-          // Hide confetti after 3 seconds
           setTimeout(() => {
             setShowConfetti(false);
           }, 3000);
 
-          // Refresh page after 4 seconds (3s confetti + 1s delay)
           setTimeout(() => {
             window.location.reload();
           }, 4000);
@@ -339,6 +340,7 @@ const Modal = ({ onClose, data }) => {
     }
   };
   
+  
   return (
     <div 
      ref={modalRef} 
@@ -380,97 +382,117 @@ const Modal = ({ onClose, data }) => {
          <X size={24} />
        </button>
 
-        <div className="p-6 flex flex-col items-center gap-4">
-          <img 
-            src={data.letterImage} 
-            alt="Descriptive Alt Text" 
-            className="w-32 h-32 object-cover rounded-full"
-          />
+       <div className="p-6 flex flex-col items-center gap-4">
+         <img 
+           src={data.letterImage} 
+           alt="Descriptive Alt Text" 
+           className="w-32 h-32 object-cover rounded-full"
+         />
 
-          <p className="text-gray-800 text-center">
-            {data ? data.taskDescription : "This is a description of the image. It provides context and information about what is depicted above."}
-          </p>
+         <p className="text-gray-800 text-center">
+           {data ? data.taskDescription : "This is a description of the image. It provides context and information about what is depicted above."}
+         </p>
 
-          <button 
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-            onClick={togglePlayPause}
-            aria-label={isPlaying ? "Pause Pronunciation" : "Listen Pronunciation"}
-          >
-            <Volume2 size={20} />
-            {isPlaying ? 'Pause Pronunciation' : 'Listen Pronunciation'}
-          </button>
+         {/* Feedback and API Output Display */}
+         {(feedbackMessage || apiOutput) && (
+           <div className="w-full space-y-2">
+             {feedbackMessage && (
+               <div className={`w-full p-3 rounded-md text-center ${
+                 feedbackType === 'success' 
+                   ? 'bg-green-100 text-green-700 border border-green-200' 
+                   : 'bg-red-100 text-red-700 border border-red-200'
+               }`}>
+                 {feedbackMessage}
+               </div>
+             )}
+             {apiOutput && (
+               <div className="w-full p-3 bg-gray-100 rounded-md text-center">
+                 <span className="text-gray-600">We heard you say: </span>
+                 <span className="font-semibold text-gray-800">{apiOutput}</span>
+               </div>
+             )}
+           </div>
+         )}
 
-          <audio 
-            ref={audioRef} 
-            // src={audio1}
-            onEnded={handleAudioEnded} 
-          />
+         <button 
+           className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+           onClick={togglePlayPause}
+           aria-label={isPlaying ? "Pause Pronunciation" : "Listen Pronunciation"}
+         >
+           <Volume2 size={20} />
+           {isPlaying ? 'Pause Pronunciation' : 'Listen Pronunciation'}
+         </button>
 
-          <div className="flex gap-4 mt-4">
-            <button 
-              className="flex items-center justify-center p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition"
-              onClick={togglePlayPause}
-              aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
-            >
-              {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-            </button>
+         <audio 
+           ref={audioRef} 
+           onEnded={handleAudioEnded} 
+         />
 
-            <button 
-              className="flex items-center justify-center p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-              onClick={restartAudio}
-              aria-label="Restart Audio"
-            >
-              <RotateCw size={20} />
-            </button>
+         <div className="flex gap-4 mt-4">
+           <button 
+             className="flex items-center justify-center p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition"
+             onClick={togglePlayPause}
+             aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
+           >
+             {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+           </button>
 
-            <button 
-              className={`flex items-center justify-center p-2 rounded-full transition ${isRepeating ? 'bg-purple-500 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400'}`}
-              onClick={toggleRepeat}
-              aria-label="Toggle Repeat"
-            >
-              <Repeat size={20} />
-            </button>
-          </div>
+           <button 
+             className="flex items-center justify-center p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+             onClick={restartAudio}
+             aria-label="Restart Audio"
+           >
+             <RotateCw size={20} />
+           </button>
 
-          <p className="text-gray-700 mt-2">
-            Children, now you can speak!
-          </p>
+           <button 
+             className={`flex items-center justify-center p-2 rounded-full transition ${isRepeating ? 'bg-purple-500 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400'}`}
+             onClick={toggleRepeat}
+             aria-label="Toggle Repeat"
+           >
+             <Repeat size={20} />
+           </button>
+         </div>
 
-          {/* Voice Record Button */}
-          <div className="mt-4 w-full">
-            <button 
-              className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition w-full"
-              onClick={recording ? stopRecording : startRecording}
-              aria-label={recording ? "Stop Recording" : "Record Voice"}
-            >
-              <Mic size={20} />
-              {recording ? 'Stop Recording' : 'Record Your Voice'}
-            </button>
+         <p className="text-gray-700 mt-2">
+           Children, now you can speak!
+         </p>
 
-            {audioURL && (
-              <div className="mt-2 w-full flex flex-col items-center">
-                <audio src={audioURL} controls className="w-full" />
-                <a href={audioURL} download="recording.wav" className="text-blue-500 underline mt-2">
-                  Download Recording
-                </a>
-              </div>
-            )}
-          </div>
+         <div className="mt-4 w-full">
+           <button 
+             className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition w-full"
+             onClick={recording ? stopRecording : startRecording}
+             aria-label={recording ? "Stop Recording" : "Record Voice"}
+             disabled={isLoading}
+           >
+             <Mic size={20} />
+             {recording ? 'Stop Recording' : 'Record Your Voice'}
+           </button>
 
-          {/* Submit Button */}
-          <div className="mt-4 w-full">
-            <button 
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition w-full"
-              onClick={submitAudio}
-              aria-label="Submit Recording"
-            >
-              Submit Recording
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+           {audioURL && (
+             <div className="mt-2 w-full flex flex-col items-center">
+               <audio src={audioURL} controls className="w-full" />
+               <a href={audioURL} download="recording.wav" className="text-blue-500 underline mt-2">
+                 Download Recording
+               </a>
+             </div>
+           )}
+         </div>
+
+         <div className="mt-4 w-full">
+           <button 
+             className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition w-full"
+             onClick={submitAudio}
+             aria-label="Submit Recording"
+             disabled={isLoading}
+           >
+             Submit Recording
+           </button>
+         </div>
+       </div>
+     </div>
+   </div>
+ );
 };
 
 export default Modal;
