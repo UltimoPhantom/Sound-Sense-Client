@@ -181,7 +181,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
   }
 
   class Treasure {
-    constructor({ x, y, imageClosed, imageOpen, scale = 0.25, taskDescription, letter, letterImage }) {
+    constructor({ x, y, imageClosed, imageOpen, scale = 0.25, taskDescription, letter, letterImage, audio }) {
       this.x = x;
       this.y = y;
       this.tIDX = treasureIndex++;
@@ -194,6 +194,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       this.taskDescription = taskDescription;
       this.letter = letter;
       this.letterImage = letterImage;
+      this.audio = audio;
 
       if (Array.isArray(treasureArray) && treasureArray.includes(this.tIDX)) {
         this.isOpen = true;
@@ -238,7 +239,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
       taskDescription: content.taskDescription,
       letterImage: content.letterImage,
       letter: content.letter,
-      aduio: content.aduio
+      audio: content.audio
     }));
 
     console.log("Treasures initialized:", treasures.map(t => ({ tIDX: t.tIDX, isOpen: t.isOpen })));

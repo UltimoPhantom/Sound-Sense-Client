@@ -14,11 +14,11 @@ const Modal = ({ onClose, data }) => {
   const [apiOutput, setApiOutput] = useState('');
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
-  
+
   const [showConfetti, setShowConfetti] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [feedbackType, setFeedbackType] = useState('');
-  const [windowDimensions, setWindowDimensions] = useState({ 
+  const [windowDimensions, setWindowDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight
   });
@@ -34,6 +34,20 @@ const Modal = ({ onClose, data }) => {
       onClose();
     }
   };
+
+  useEffect(() => {
+    // Create and set up audio element when modal opens
+    const audio = new Audio(data.audioRef); // Assuming audioRef is a URL
+    audioRef.current = audio;
+    
+    // Clean up audio when modal closes
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [data.audioRef]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleEsc, false);
@@ -163,20 +177,20 @@ const Modal = ({ onClose, data }) => {
     let offset = 0;
     let pos = 0;
 
-    setUint32(0x46464952); 
-    setUint32(length - 8); 
-    setUint32(0x45564157); 
-    setUint32(0x20746d66); 
-    setUint32(16); 
-    setUint16(1); 
+    setUint32(0x46464952);
+    setUint32(length - 8);
+    setUint32(0x45564157);
+    setUint32(0x20746d66);
+    setUint32(16);
+    setUint16(1);
     setUint16(numOfChan);
     setUint32(abuffer.sampleRate);
-    setUint32(abuffer.sampleRate * 2 * numOfChan); 
-    setUint16(numOfChan * 2); 
+    setUint32(abuffer.sampleRate * 2 * numOfChan);
+    setUint16(numOfChan * 2);
     setUint16(16);
 
-    setUint32(0x61746164); 
-    setUint32(length - pos - 4); 
+    setUint32(0x61746164);
+    setUint32(length - pos - 4);
 
     for (i = 0; i < abuffer.numberOfChannels; i++) {
       channels.push(abuffer.getChannelData(i));
@@ -205,7 +219,7 @@ const Modal = ({ onClose, data }) => {
     return new Blob([buffer], { type: "audio/wav" });
   };
 
-   const submitAudio = async () => {
+  const submitAudio = async () => {
     if (!audioURL) {
       setFeedbackMessage('No audio recorded to submit.');
       setFeedbackType('error');
@@ -221,29 +235,29 @@ const Modal = ({ onClose, data }) => {
     const response = await fetch(audioURL);
     const blob = await response.blob();
     formData.append('file', blob, 'recording.wav');
-  
+
     try {
       const res = await fetch('http://127.0.0.1:5000/transcribe', {
         method: 'POST',
         body: formData,
-        mode: 'cors',  
+        mode: 'cors',
       });
       if (res.ok) {
         const apiRes = await res.json();
         console.log("♨️RESULT LETTER: ♨️", apiRes.message);
         setApiOutput(apiRes.message);
-        
-        if(apiRes.message.toLowerCase() === data.letter.toLowerCase()) {
+
+        if (apiRes.message.toLowerCase() === data.letter.toLowerCase()) {
           console.log("♨️♨️", "ITS CORRECT");
           setFeedbackMessage('Correct! Well done!');
           setFeedbackType('success');
-  
+
           await updateScore();
           await collectTreasure(data.ttIDX);
           await updateCoordinates(data.x, data.y);
-          
+
           setShowConfetti(true);
-          
+
           setTimeout(() => {
             setShowConfetti(false);
           }, 3000);
@@ -277,10 +291,10 @@ const Modal = ({ onClose, data }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        mode: 'cors',  
-        body: JSON.stringify({ level: 1 }) 
+        mode: 'cors',
+        body: JSON.stringify({ level: 1 })
       });
-  
+
       if (res.ok) {
         const result = await res.json();
         console.log(`Updated Score: ${result.score}`);
@@ -291,7 +305,7 @@ const Modal = ({ onClose, data }) => {
       console.error('Failed to update score:', err);
     }
   };
-  
+
 
   const updateCoordinates = async (newX, newY) => {
     try {
@@ -299,12 +313,12 @@ const Modal = ({ onClose, data }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, 
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        mode: 'cors',  
+        mode: 'cors',
         body: JSON.stringify({ newX, newY })
       });
-  
+
       if (res.ok) {
         const result = await res.json();
         console.log(`Updated Coordinates: X=${result.curr_x}, Y=${result.curr_y}`);
@@ -315,8 +329,8 @@ const Modal = ({ onClose, data }) => {
       console.error('Failed to update coordinates:', err);
     }
   };
-  
-  
+
+
   const collectTreasure = async (treasureIndex) => {
     try {
       const res = await fetch('http://localhost:8080/player/addTreasureBox', {
@@ -325,10 +339,10 @@ const Modal = ({ onClose, data }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        mode: 'cors',  
+        mode: 'cors',
         body: JSON.stringify({ treasureIndex }),
       });
-  
+
       if (res.ok) {
         const result = await res.json();
         console.log('Treasure Collected');
@@ -339,160 +353,159 @@ const Modal = ({ onClose, data }) => {
       console.error('Failed to collect treasure:', err);
     }
   };
-  
-  
+
+
   return (
-    <div 
-     ref={modalRef} 
-     onClick={closeModal} 
-     className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50"
-   >
-     {showConfetti && (
-       <div className="fixed inset-0 z-50 pointer-events-none">
-         <Confetti
-           width={windowDimensions.width}
-           height={windowDimensions.height}
-           recycle={true}
-           numberOfPieces={500}
-           gravity={0.3}
-           initialVelocityY={20}
-           tweenDuration={100}
-           wind={0.05}
-           origin={{ x: 0.5, y: 0 }}
-         />
-       </div>
-     )}
-     
-     {/* Loading Overlay */}
-     {isLoading && (
-       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-         <div className="bg-white p-6 rounded-lg flex flex-col items-center gap-3">
-           <Loader className="w-8 h-8 animate-spin text-blue-500" />
-           <p className="text-gray-700">Processing your recording...</p>
-         </div>
-       </div>
-     )}
+    <div
+      ref={modalRef}
+      onClick={closeModal}
+      className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50"
+    >
+      {showConfetti && (
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          <Confetti
+            width={windowDimensions.width}
+            height={windowDimensions.height}
+            recycle={true}
+            numberOfPieces={500}
+            gravity={0.3}
+            initialVelocityY={20}
+            tweenDuration={100}
+            wind={0.05}
+            origin={{ x: 0.5, y: 0 }}
+          />
+        </div>
+      )}
 
-     <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md mx-4">
-       <button 
-         onClick={onClose} 
-         className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-         aria-label="Close Modal"
-       >
-         <X size={24} />
-       </button>
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg flex flex-col items-center gap-3">
+            <Loader className="w-8 h-8 animate-spin text-blue-500" />
+            <p className="text-gray-700">Processing your recording...</p>
+          </div>
+        </div>
+      )}
 
-       <div className="p-6 flex flex-col items-center gap-4">
-         <img 
-           src={data.letterImage} 
-           alt="Descriptive Alt Text" 
-           className="w-32 h-32 object-cover rounded-full"
-         />
+      <div className="relative bg-white rounded-lg shadow-lg w-11/12 max-w-md mx-4">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+          aria-label="Close Modal"
+        >
+          <X size={24} />
+        </button>
 
-         <p className="text-gray-800 text-center">
-           {data ? data.taskDescription : "This is a description of the image. It provides context and information about what is depicted above."}
-         </p>
+        <div className="p-6 flex flex-col items-center gap-4">
+          <img
+            src={data.letterImage}
+            alt="Descriptive Alt Text"
+            className="w-32 h-32 object-cover rounded-full"
+          />
 
-         {/* Feedback and API Output Display */}
-         {(feedbackMessage || apiOutput) && (
-           <div className="w-full space-y-2">
-             {feedbackMessage && (
-               <div className={`w-full p-3 rounded-md text-center ${
-                 feedbackType === 'success' 
-                   ? 'bg-green-100 text-green-700 border border-green-200' 
-                   : 'bg-red-100 text-red-700 border border-red-200'
-               }`}>
-                 {feedbackMessage}
-               </div>
-             )}
-             {apiOutput && (
-               <div className="w-full p-3 bg-gray-100 rounded-md text-center">
-                 <span className="text-gray-600">We heard you say: </span>
-                 <span className="font-semibold text-gray-800">{apiOutput}</span>
-               </div>
-             )}
-           </div>
-         )}
+          <p className="text-gray-800 text-center">
+            {data ? data.taskDescription : "This is a description of the image. It provides context and information about what is depicted above."}
+          </p>
 
-         <button 
-           className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-           onClick={togglePlayPause}
-           aria-label={isPlaying ? "Pause Pronunciation" : "Listen Pronunciation"}
-         >
-           <Volume2 size={20} />
-           {isPlaying ? 'Pause Pronunciation' : 'Listen Pronunciation'}
-         </button>
+          {/* Feedback and API Output Display */}
+          {(feedbackMessage || apiOutput) && (
+            <div className="w-full space-y-2">
+              {feedbackMessage && (
+                <div className={`w-full p-3 rounded-md text-center ${feedbackType === 'success'
+                    ? 'bg-green-100 text-green-700 border border-green-200'
+                    : 'bg-red-100 text-red-700 border border-red-200'
+                  }`}>
+                  {feedbackMessage}
+                </div>
+              )}
+              {apiOutput && (
+                <div className="w-full p-3 bg-gray-100 rounded-md text-center">
+                  <span className="text-gray-600">We heard you say: </span>
+                  <span className="font-semibold text-gray-800">{apiOutput}</span>
+                </div>
+              )}
+            </div>
+          )}
 
-         <audio 
-           ref={audioRef} 
-           onEnded={handleAudioEnded} 
-         />
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+            onClick={togglePlayPause}
+            aria-label={isPlaying ? "Pause Pronunciation" : "Listen Pronunciation"}
+          >
+            <Volume2 size={20} />
+            {isPlaying ? 'Pause Pronunciation' : 'Listen Pronunciation'}
+          </button>
 
-         <div className="flex gap-4 mt-4">
-           <button 
-             className="flex items-center justify-center p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition"
-             onClick={togglePlayPause}
-             aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
-           >
-             {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-           </button>
+          <audio
+            ref={audioRef}
+            onEnded={handleAudioEnded}
+          />
 
-           <button 
-             className="flex items-center justify-center p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-             onClick={restartAudio}
-             aria-label="Restart Audio"
-           >
-             <RotateCw size={20} />
-           </button>
+          {/* <div className="flex gap-4 mt-4"> */}
+            {/* <button
+              className="flex items-center justify-center p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition"
+              onClick={togglePlayPause}
+              aria-label={isPlaying ? "Pause Audio" : "Play Audio"}
+            >
+              {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+            </button> */}
 
-           <button 
-             className={`flex items-center justify-center p-2 rounded-full transition ${isRepeating ? 'bg-purple-500 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400'}`}
-             onClick={toggleRepeat}
-             aria-label="Toggle Repeat"
-           >
-             <Repeat size={20} />
-           </button>
-         </div>
+            {/* <button
+              className="flex items-center justify-center p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+              onClick={restartAudio}
+              aria-label="Restart Audio"
+            >
+              <RotateCw size={20} />
+            </button> */}
 
-         <p className="text-gray-700 mt-2">
-           Children, now you can speak!
-         </p>
+            {/* <button
+              className={`flex items-center justify-center p-2 rounded-full transition ${isRepeating ? 'bg-purple-500 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-400'}`}
+              onClick={toggleRepeat}
+              aria-label="Toggle Repeat"
+            >
+              <Repeat size={20} />
+            </button> */}
+          {/* </div> */}
 
-         <div className="mt-4 w-full">
-           <button 
-             className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition w-full"
-             onClick={recording ? stopRecording : startRecording}
-             aria-label={recording ? "Stop Recording" : "Record Voice"}
-             disabled={isLoading}
-           >
-             <Mic size={20} />
-             {recording ? 'Stop Recording' : 'Record Your Voice'}
-           </button>
+          <p className="text-gray-700 mt-2">
+            Child, now you can speak!
+          </p>
 
-           {audioURL && (
-             <div className="mt-2 w-full flex flex-col items-center">
-               <audio src={audioURL} controls className="w-full" />
-               <a href={audioURL} download="recording.wav" className="text-blue-500 underline mt-2">
-                 Download Recording
-               </a>
-             </div>
-           )}
-         </div>
+          <div className="mt-4 w-full">
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition w-full"
+              onClick={recording ? stopRecording : startRecording}
+              aria-label={recording ? "Stop Recording" : "Record Voice"}
+              disabled={isLoading}
+            >
+              <Mic size={20} />
+              {recording ? 'Stop Recording' : 'Record Your Voice'}
+            </button>
 
-         <div className="mt-4 w-full">
-           <button 
-             className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition w-full"
-             onClick={submitAudio}
-             aria-label="Submit Recording"
-             disabled={isLoading}
-           >
-             Submit Recording
-           </button>
-         </div>
-       </div>
-     </div>
-   </div>
- );
+            {audioURL && (
+              <div className="mt-2 w-full flex flex-col items-center">
+                <audio src={audioURL} controls className="w-full" />
+                <a href={audioURL} download="recording.wav" className="text-blue-500 underline mt-2">
+                  Download Recording
+                </a>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-4 w-full">
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition w-full"
+              onClick={submitAudio}
+              aria-label="Submit Recording"
+              disabled={isLoading}
+            >
+              Submit Recording
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Modal;
