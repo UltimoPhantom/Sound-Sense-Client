@@ -4,6 +4,7 @@ import background from '../images/background.png';
 import platformSmallTall from '../images/platformSmallTall.png';
 import platformSmallTall1 from '../images/platformSmallTall1.png'
 import platformSmallTall2 from '../images/platformSmallTall2.jpg'
+import pL2 from '../images/pL2.jpg'
 import spriteRunLeft from '../images/spriteRunLeft.png';
 import spriteRunRight from '../images/spriteRunRight.png';
 import spriteStandLeft from '../images/spriteStandLeft.png';
@@ -262,6 +263,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     const platformSmallTallImage = createImage(platformSmallTall);
     const platformSmallTall1Image = createImage(platformSmallTall1);
     const platformSmallTall2Image = createImage(platformSmallTall2);
+    const platformL = createImage(pL2);
 
     platforms = [
       new Platform({ x: -1, y: 470, image: platformImage }),
@@ -325,7 +327,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
 
       // -------------> *|LEVEL 2|* <-----------------------
 
-      new Platform({ x: 18820, y: 470, image: platformImage2 }),
+      new Platform({ x: 18820, y: 470, image: platformL }),
       new Platform({ x: 18820 + platformImage.width, y: 470, image: platformImage2 }),
       new Platform({ x: 18820 + (platformImage.width + 50) * 2 + 100, y: 470, image: platformImage }),
       new Platform({ x: 18820 + (platformImage.width + 50) * 3 + 300, y: 470, image: platformImage }),
