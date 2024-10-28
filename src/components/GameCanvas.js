@@ -9,8 +9,10 @@ const GameCanvas = ({ playerPosition, treasureArray }) => {
   const [modalData, setModalData] = useState(null);
   const gameControlsRef = useRef(null);
 
-  // playerPosition.curr_x = 18820
+  // playerPosition.curr_x = 18936.00
   // playerPosition.curr_y = 319
+
+  // (21276.00, 319.00)
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,7 +38,7 @@ const GameCanvas = ({ playerPosition, treasureArray }) => {
         taskDescription: treasure.taskDescription,
         letterImage: treasure.letterImage,
         letter: treasure.letter,
-        audio: treasure.audio,
+        audioRef: treasure.audio,
       });
       setShowModal(true);
       if (gameControlsRef.current && gameControlsRef.current.pause) {
