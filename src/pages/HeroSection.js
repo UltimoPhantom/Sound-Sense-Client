@@ -5,19 +5,19 @@ const HeroSection = () => {
   return (
     <div className="flex flex-col items-center mt-6 lg:mt-20">
       <h1 className="text-4xl sm:text-6xl lg:text-7xl text-center tracking-wide">
-        Unlock Your Voice with 
+        Unlock Your Voice with
         <span className="bg-gradient-to-r from-pink-500 to-purple-700 text-transparent bg-clip-text">
           {<br></br>}
           Confidence
         </span>
       </h1>
       <p className="mt-10 text-lg text-center text-neutral-500 max-w-4xl">
-        Empower speech development through personalized learning! Our platform assists students with speech disorders to improve pronunciation, build confidence, and enhance communication skills. Start your journey to clearer speech 
+        Empower speech development through personalized learning! Our platform assists students with speech disorders to improve pronunciation, build confidence, and enhance communication skills. Start your journey to clearer speech
         <span className="bg-gradient-to-r from-pink-500 to-purple-700 text-transparent bg-clip-text"> from today!</span>
       </p>
       <div className="flex justify-center my-10">
         <a
-          href="#"
+          href="http://localhost:3000/login"
           className="bg-gradient-to-r from-pink-500 to-purple-700 py-3 px-4 mx-3 rounded-md"
         >
           Let's Begin your Journey!

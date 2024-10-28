@@ -32,7 +32,7 @@ const Navbar = () => {
             Sign In
         </Link>
             <a
-              href="#"
+            href="http://localhost:3000/signup"
               className="bg-gradient-to-r from-pink-500 to-purple-700  py-2 px-3 rounded-md"
             >
               Create an account
