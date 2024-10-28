@@ -4,26 +4,26 @@ import Navbar from "./Navbar"
 import Footer from "./Footer"
 
 const LandingPage = () => {
-    return (
-        <>
-            
-            <Navbar />
-      
+  return (
+    <>
+
+      <Navbar />
+
       <div id="hero">
-        <HeroSection/>
+        <HeroSection />
       </div>
 
       <div id="features">
         <FeatureSection />
       </div>
 
-      
+
 
       <div id="contact-us">
         <Footer />
       </div>
-            
-        </>
-    )
+
+    </>
+  )
 }
 export default LandingPage

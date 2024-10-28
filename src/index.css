@@ -10,55 +10,124 @@
   color-scheme: dark;
 }
 
-/* Add this to your CSS file */
-.home-container {
-  background-color: #000; /* Black background */
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.content h1 {
-  color: #fff; /* White text */
-  font-size: 3rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
+/* Existing CSS from previous example */
+/* Add the following CSS for the navbar */
 
 .navbar {
+  /* background-color: #f5f5f5; */
+}
+
+.navbar .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.navbar .flex {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.navbar-user {
-  color: #fff;
-  font-size: 1.2rem;
-  margin-right: 1rem;
-}
-
-.navbar-button {
-  background: linear-gradient(90deg, #f72585, #7209b7); /* Gradient similar to the button in the image */
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out, background 0.3s ease;
-}
-
-.navbar-button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #b5179e, #560bad);
-}
-
-h1 {
-  color: #fff;
-  font-size: 2rem;
+.navbar .logo {
+  font-size: 1.5rem;
   font-weight: bold;
-  text-align: center;
 }
 
+.navbar .nav-items {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar .nav-items li {
+  margin-right: 2rem;
+}
+
+.navbar .nav-items a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navbar .nav-items a:hover {
+  color: #555;
+}
+
+.navbar .auth-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .auth-buttons button {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
+}
+
+.navbar .auth-buttons .sign-in {
+  border: 1px solid #333;
+  background-color: transparent;
+  color: #333;
+}
+
+.navbar .auth-buttons .sign-in:hover {
+  /* background-color: #eee; */
+}
+
+.navbar .auth-buttons .sign-up {
+  background-image: linear-gradient(to right, #ff6b6b, #ffa500);
+  border: none;
+  /* color: #fff; */
+}
+
+.navbar .auth-buttons .sign-up:hover {
+  background-image: linear-gradient(to right, #ff4b4b, #ff9000);
+}
+
+@media (max-width: 768px) {
+  .navbar .nav-items,
+  .navbar .auth-buttons {
+    display: none;
+  }
+
+  .navbar .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    /* background-color: #f5f5f5; */
+    z-index: 100;
+  }
+
+  .navbar .mobile-menu .nav-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .navbar .mobile-menu .nav-items li {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .navbar .mobile-menu .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar .mobile-menu .auth-buttons button {
+    margin-left: 0;
+    margin-bottom: 1rem;
+  }
+}
