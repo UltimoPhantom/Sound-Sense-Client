@@ -14,6 +14,7 @@ import aa from '../assets/aa.mp3';
 import na from '../assets/na.mp3';
 import la from '../assets/la.mp3';
 import tha from '../assets/tha.mp3'
+import tra from '../assets/tra.mp3';
 
 import anubhava from '../assets/anubhava.mp3'
 import sorry from '../assets/sorry.mp3'
@@ -93,8 +94,8 @@ const createTreasureContent = () => [
       imageOpen: box_open_png,
       taskDescription: "Repeat the phrase 'I can speak!'",
       letterImage: img6,
-      letter: 'ತ್ರ'
-      // audio: ,
+      letter: 'ತ್ರ',
+      audio: tra,
     },
     { //1
       x: 18820 + 2870,
