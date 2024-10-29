@@ -23,9 +23,9 @@ export const features = [
       "Parents can easily monitor their child's improvement and milestones through an intuitive tracking system.",
   },
   {
-    text: "AI-Powered Speech Assistance",
+    text: "ML-Powered Speech Assistance",
     description:
-      "Our AI analyzes children's voices to provide guidance and personalized feedback for better speech development.",
+      "Our ML analyzes children's voices to provide guidance and personalized feedback for better speech development.",
   },
   {
     text: "Engaging Learning Platform",

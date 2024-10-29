@@ -35,7 +35,7 @@ export function initializeGame(canvas, playerPosition, treasureArray, onTreasure
     constructor() {
       this.width = 66;
       this.height = 150;
-      this.speed = 5 * 2; // Reduced from 10 to 5
+      this.speed = 5 * 1.7; // Reduced from 10 to 5
       this.frames = 0;
       this.sprites = {
         stand: {
