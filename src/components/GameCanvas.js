@@ -10,7 +10,7 @@ const GameCanvas = ({ playerPosition, treasureArray }) => {
   const gameControlsRef = useRef(null);
 
   playerPosition.curr_x = 18936.00
-  playerPosition.curr_y = 319
+  playerPosition.curr_y = 318
 
   // (21276.00, 319.00)
 
